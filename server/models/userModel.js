@@ -11,6 +11,10 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
+    Cpassword: {
+        type: String,
+        required: true
+    },
     Email:{
         type:String,
         required:true
@@ -64,6 +68,7 @@ const validateUser = (user) => {
         Username:joi.string().required(),
         Email: joi.string().email().min(5).max(100).required(),
         Password: passwordComplexity(complexityOptions),
+        Cpassword:passwordComplexity(complexityOptions),
         IsAdmin:joi.boolean(),
         IsSuperAdmin:joi.boolean()
 
