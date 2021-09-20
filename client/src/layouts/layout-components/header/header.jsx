@@ -1,4 +1,5 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom'
 import {
     Nav,
     NavItem,
@@ -72,7 +73,12 @@ const Header = () => {
                                     <i className="ti-wallet mr-1 ml-1" /> My Balance
                   </DropdownItem>
                                 <DropdownItem>
-                                    <i className="ti-email mr-1 ml-1" /> Inbox
+                                    {/* <i className="ti-email mr-1 ml-1" /> Login */}
+                                    <NavLink className="nav-link" to="/loggedin">
+                                    {/* <i className="ti-email mr-1 ml-1" /> Login */}
+                                    <span className="ti-email hide-menu "style={{color:"black"}}>Login</span>
+                                    </NavLink>
+                                 
                   </DropdownItem>
                                 <DropdownItem divider />
                                 <DropdownItem>

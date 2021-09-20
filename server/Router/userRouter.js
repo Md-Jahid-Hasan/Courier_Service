@@ -20,9 +20,7 @@ const newUser = async (req,res)=>{
     // _.pick(req.body, ['Email', 'Password'])
 
     const salt = await bcrypt.genSalt(10);
-    
 
-    
     user.Password = await bcrypt.hash(user.Password, salt);
     user.branch = req.params.branch
 
@@ -87,7 +85,7 @@ const deleteUser = async (req,res)=>{
 const login = async (req, res) => {
     const { email, password } = req.body
     if (!email || !password) return res.status(400).json({message:"fill the empty field"});
-    const user = await User.findOne({ Email: req.body.email })
+    const user = await User.findOne({ Email: req.body.email }).populate("branch","branch contact" )
     if (!user) return res.status(400).json({message:"This email is not registered"})
     const pass = await bcrypt.compare(req.body.password, user.Password);
     if (!pass) return res.status(400).json({message:"incorrect Password"})
@@ -102,6 +100,7 @@ const login = async (req, res) => {
     const result = await user.save();
     res.status(200).send({
         token: token,
+        user: _.pick(result, ['_id', 'Email','IsAdmin','IsSuperAdmin','branch'])
     })
 
 }

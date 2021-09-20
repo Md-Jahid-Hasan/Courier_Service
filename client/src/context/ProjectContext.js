@@ -7,22 +7,26 @@ import { BrowserRouter } from 'react-router-dom'
 export const GlobalContext = createContext()
 
 let initialState = {
-    user: {
-        name: "jahid",
-        isAdmin: false,
-        isSubAdmin: true,
-    },
-    auth: {
-        isAuthenticated: true,
-        isLoading: false,
-    }
+        Email:"",
+        IsAdmin:Boolean,
+        IsSuperadmin:Boolean,
+        branch:{
+            branch:"",
+            contact:"",
+            id:""
+        }
 }
 
 const ProjectContext = () => {
     const [state, dispatch] = useReducer(reducer, initialState)
-
+    const storeLoginData =(data)=>{
+        return dispatch({
+            type:'LOGIN_INFO',
+            payload:data
+        })
+    }
     return (
-        <GlobalContext.Provider value={{...state}}>
+        <GlobalContext.Provider value={{...state,storeLoginData}}>
             <BrowserRouter>
                 <Switch>
                     {indexRoutes.map((prop, key) => {
