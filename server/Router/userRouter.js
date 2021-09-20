@@ -11,17 +11,23 @@ app.use(cookieParser())
 
 const newUser = async (req,res)=>{
     const { error } = validate(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
+    if (error) return res.status(400).json({message:error.details[0].message});
 
-    let user = await User.findOne({ Email: req.body.Email });
-    if (user) return res.status(400).send('User already registered!');
+    const {Email,Password,Cpassword,Username} = req.body
+    if(!Email||!Password||!Cpassword||!Username) return res.status(400).json({message:"Fill All the Fields"})
 
+    let user = await User.findOne({ Email:Email });
+    if (user) return res.status(400).json({message:'User already registered!'});
     user = new User(req.body);
     // _.pick(req.body, ['Email', 'Password'])
 
     const salt = await bcrypt.genSalt(10);
-
-    user.Password = await bcrypt.hash(user.Password, salt);
+    if(Password!==Cpassword) return res.status(400).json({message:"Password Doesn't Match"})
+    user.Password = await bcrypt.hash(Password, salt);
+    user.Cpassword = await bcrypt.hash(Cpassword, salt);
+    // console.log(pass)
+    // if (!pass) return res.status(400).json({message:"Password Doesn't Match"})
+    
     user.branch = req.params.branch
 
     user = await user.save()
