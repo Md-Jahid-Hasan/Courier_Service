@@ -21,6 +21,8 @@ const newUser = async (req,res)=>{
 
     const salt = await bcrypt.genSalt(10);
     
+
+    
     user.Password = await bcrypt.hash(user.Password, salt);
     user.branch = req.params.branch
 
