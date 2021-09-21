@@ -6,7 +6,19 @@ import { BrowserRouter } from 'react-router-dom'
 
 export const GlobalContext = createContext()
 
+// let initialState = {
+//         Email:"",
+//         IsAdmin:Boolean,
+//         IsSuperadmin:Boolean,
+//         branch:{
+//             branch:"",
+//             contact:"",
+//             id:""
+//         }
+// }
+
 let initialState = {
+    authenticateUser: {
         Email:"",
         IsAdmin:Boolean,
         IsSuperadmin:Boolean,
@@ -15,6 +27,11 @@ let initialState = {
             contact:"",
             id:""
         }
+    },
+    auth: {
+        isAuthenticad: false,
+        isLoading: false,
+    }
 }
 
 const ProjectContext = () => {
