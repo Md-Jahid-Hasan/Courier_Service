@@ -1,12 +1,19 @@
 import React, {useState, useEffect, useContext} from 'react';
-import { Container, Col, Row, Card, CardBody, CardTitle } from 'reactstrap';
+import { Container, Alert, Row, Card, CardBody, CardTitle } from 'reactstrap';
 import {GlobalContext} from "../../context/ProjectContext"
+import Notification from './Notification';
 
 
 const LayoutComponent = () => {
     const [userData, setUserData] = useState({Email: "", Username:"", Password:"", Cpassword:""})
     const [branch, setBranch] = useState([])
     const {authenticateUser} = useContext(GlobalContext);
+    const [createAlert, setAlert] = useState({msg:"", code:"", visibility:false})
+
+    useEffect(() => {
+        if(createAlert.visibility)
+            setAlert({...createAlert, visibility:false})
+    }, [userData])
     
 
     useEffect(() => {
@@ -43,6 +50,7 @@ const LayoutComponent = () => {
 
     const handleUserData = async(e) => {
         e.preventDefault()
+        let count = 0;
         if(authenticateUser.IsSuperAdmin){
             userData['IsAdmin'] = true
         }
@@ -56,108 +64,122 @@ const LayoutComponent = () => {
                     ...userData
                 })
             }) 
-
+        
         const temp = await res.json()
+        if(res.status === 200){
+            setAlert({...createAlert, msg:"User Create Successfully", code:"success", visibility:true})
+
+        } else{
+           
+                setAlert({...createAlert, msg:temp.message, code:"danger", visibility:true})
+            
+        }
+
         console.log(userData)
         console.log(temp)
     }
+
     return (
         <div>
             <Card>
                 <CardTitle className="bg-light border-bottom p-3 mb-0">
                     <i className="mdi mdi-apps mr-2"> </i>
-            Create A User
-          </CardTitle>
+                    Create A User
+                </CardTitle>
+
                 <CardBody className="">
                     <Container>
-                    <div class="container-fluid">
-        <div class="row d-flex justify-content-center align-items-center m-0">
-          <div class="login_oueter">
-            <form action="" method="post" id="login" autocomplete="off" 
-                class="bg-light border p-3" onSubmit={(e) =>handleUserData(e)}>
-              <div class="form-row">
-                <h4 class="title my-3">Register For an Account</h4>
-                <div class="col-12">
-                  <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text" id="basic-addon1"><i class="fas fa-user"></i></span>
-                    </div>
-                    <input name="username" type="text" value={userData.Username} class="input form-control" id="username" 
-                    placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" 
-                    onChange={(e) => setUserData({...userData, Username: e.target.value})}/>
-                  </div>
-                </div>
-                <div class="col-12">
-                  <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text" id="basic-addon1"><i class="fas fa-envelope"></i></span>
-                    </div>
-                    <input name="email" type="text" value={userData.Email} class="input form-control" id="email"
-                     placeholder="Enter Your Email" aria-label="Username" aria-describedby="basic-addon1" 
-                     onChange={(e) => setUserData({...userData, Email: e.target.value})}/>
-                  </div>
-                </div>
+                        {createAlert.visibility && <Notification {...createAlert} />}
+                   
+                        <div class="container-fluid">
+                            <div class="row d-flex justify-content-center align-items-center m-0">
+                            <div class="login_oueter">
+                                <form action="" method="post" id="login" autocomplete="off" 
+                                    class="bg-light border p-3" onSubmit={(e) =>handleUserData(e)}>
+                                <div class="form-row">
+                                    <h4 class="title my-3">Register For an Account</h4>
+                                    <div class="col-12">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon1"><i class="fas fa-user"></i></span>
+                                        </div>
+                                        <input name="username" type="text" value={userData.Username} class="input form-control" id="username" 
+                                        placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" 
+                                        onChange={(e) => {
+                                            setUserData({...userData, Username: e.target.value})}}/>
+                                    </div>
+                                    </div>
+                                    <div class="col-12">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon1"><i class="fas fa-envelope"></i></span>
+                                        </div>
+                                        <input name="email" type="text" value={userData.Email} class="input form-control" id="email"
+                                        placeholder="Enter Your Email" aria-label="Username" aria-describedby="basic-addon1" 
+                                        onChange={(e) => setUserData({...userData, Email: e.target.value})}/>
+                                    </div>
+                                    </div>
 
 
-                <div class="col-12">
-                  <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text" id="basic-addon1"><i class="fas fa-code-branch"></i></span>
-                    </div>
-                    <select class="form-control form-control-sm" id="sel1" defaultValue={'DEFAULT'}>
-                      <option value="DEFAULT" disabled hidden>
-                        Enter Your Branch
-                    </option>
-                    {branch.map((x, key) => 
-                        <option value={x._id}>{x.branch}</option>
-                    )}
-                    
-                    </select>
-                  </div>
-                </div>
+                                    <div class="col-12">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon1"><i class="fas fa-code-branch"></i></span>
+                                        </div>
+                                        <select class="form-control form-control-sm" id="sel1" defaultValue={'DEFAULT'}>
+                                        <option value="DEFAULT" disabled hidden>
+                                            Enter Your Branch
+                                        </option>
+                                        {branch.map((x, key) => 
+                                            <option value={x._id}>{x.branch}</option>
+                                        )}
+                                        
+                                        </select>
+                                    </div>
+                                    </div>
 
 
-                <div class="col-12">
-                  <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text" id="basic-addon1"><i class="fas fa-lock"></i></span>
-                    </div>
-                    <input name="password" type="password" value={userData.Password} class="input form-control" id="password" 
-                    placeholder="password" required aria-label="password" aria-describedby="basic-addon1" 
-                    onChange={(e) => setUserData({...userData, Password: e.target.value})}/>
-                    <div class="input-group-append">
-                      <span class="input-group-text" onClick={() => password_show_hide()}>
-                        <i class="fas fa-eye" id="show_eye"></i>
-                        <i class="fas fa-eye-slash d-none" id="hide_eye"></i>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-12">
-                  <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text" id="basic-addon1"><i class="fas fa-lock"></i></span>
-                    </div>
-                    <input name="confirm password" type="password" value={userData.Cpassword} class="input form-control" id="confirm password" 
-                    placeholder="confirm password" required aria-label="password" aria-describedby="basic-addon1" 
-                    onChange={(e) => setUserData({...userData, Cpassword: e.target.value})}/>
-                    <div class="input-group-append">
-                      <span class="input-group-text" onClick={() => password_show_hide()}>
-                        <i class="fas fa-eye" id="show_eye"></i>
-                        <i class="fas fa-eye-slash d-none" id="hide_eye"></i>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-               
-                <div class="col-12" id="loginbtnDiv">
-                  <button class="btn btn" type="submit" id="signinbtn" name="signin">Login</button>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
+                                    <div class="col-12">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon1"><i class="fas fa-lock"></i></span>
+                                        </div>
+                                        <input name="password" type="password" value={userData.Password} class="input form-control" id="password" 
+                                        placeholder="password" required aria-label="password" aria-describedby="basic-addon1" 
+                                        onChange={(e) => setUserData({...userData, Password: e.target.value})}/>
+                                        <div class="input-group-append">
+                                        <span class="input-group-text" onClick={() => password_show_hide()}>
+                                            <i class="fas fa-eye" id="show_eye"></i>
+                                            <i class="fas fa-eye-slash d-none" id="hide_eye"></i>
+                                        </span>
+                                        </div>
+                                    </div>
+                                    </div>
+                                    <div class="col-12">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon1"><i class="fas fa-lock"></i></span>
+                                        </div>
+                                        <input name="confirm password" type="password" value={userData.Cpassword} class="input form-control" id="confirm password" 
+                                        placeholder="confirm password" required aria-label="password" aria-describedby="basic-addon1" 
+                                        onChange={(e) => setUserData({...userData, Cpassword: e.target.value})}/>
+                                        <div class="input-group-append">
+                                        <span class="input-group-text" onClick={() => password_show_hide()}>
+                                            <i class="fas fa-eye" id="show_eye"></i>
+                                            <i class="fas fa-eye-slash d-none" id="hide_eye"></i>
+                                        </span>
+                                        </div>
+                                    </div>
+                                    </div>
+                                
+                                    <div class="col-12" id="loginbtnDiv">
+                                    <button class="btn btn" type="submit" id="signinbtn" name="signin">Login</button>
+                                    </div>
+                                </div>
+                                </form>
+                            </div>
+                            </div>
+                        </div>
                     </Container>
                 </CardBody>
             </Card>
