@@ -94,8 +94,8 @@ const Fulllayout = (props) => {
                 <div className="page-content container-fluid">
                     <Switch>
                         <PrivateRoute exact path="/(|dashboard)" component={Starter}/>
-                        <Route exact path="/loggedin" component={Login}/>
-                        <LoginPrivateRoute exact path="/login" component={Login}/>
+                        {/* <Route exact path="/loggedin" component={Login}/> */}
+                        <LoginPrivateRoute exact path="/(login|loggedin)" component={Login}/>
                         <PrivateRoute exact path="/branch-data" component={Alerts}/>
                         <PrivateRoute exact path="/all-branch" component={Badges}/>
                         <PrivateRoute exact path="/create-percel" component={Buttons}/>

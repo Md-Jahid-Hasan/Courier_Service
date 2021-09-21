@@ -2,12 +2,13 @@ export const reducer = (state, action) => {
     switch(action.type){
         case 'LOGIN_INFO':
             const data = action.payload
-            state.IsAdmin=  data.user.IsAdmin
-            state.IsSuperAdmin= data.user.IsSuperAdmin
-            console.log(state.IsAdmin)
-            console.log(state.IsSuperAdmin)
-
-            return {...state,IsAdmin:state.IsAdmin,IsSuperAdmin:state.IsSuperAdmin}
+            state.authenticateUser.IsAdmin=  data.user.IsAdmin
+            state.authenticateUser.IsSuperAdmin= data.user.IsSuperAdmin
+            console.log(state.authenticateUser.IsAdmin)
+            console.log(state.authenticateUser.IsSuperAdmin)
+            state.auth.isAuthenticated = true
+            return {...state,IsAdmin:state.authenticateUser.IsAdmin,
+                                    IsSuperAdmin:state.authenticateUser.IsSuperAdmin}
             
         default:
             return {...state}

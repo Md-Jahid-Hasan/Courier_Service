@@ -103,10 +103,10 @@ const login = async (req, res) => {
         expires: new Date(Date.now() + 25892000000),
         httpOnly: true
     });
-    const result = await user.save();
+    // const result = await user.save();
     res.status(200).send({
         token: token,
-        user: _.pick(result, ['_id', 'Email','IsAdmin','IsSuperAdmin','branch'])
+        user: _.pick(user, ['_id', 'Email','IsAdmin','IsSuperAdmin','branch'])
     })
 
 }

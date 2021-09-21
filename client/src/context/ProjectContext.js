@@ -29,7 +29,7 @@ let initialState = {
         }
     },
     auth: {
-        isAuthenticad: false,
+        isAuthenticated: false,
         isLoading: false,
     }
 }

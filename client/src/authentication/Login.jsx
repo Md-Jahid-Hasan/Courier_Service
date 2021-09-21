@@ -44,7 +44,14 @@ const Login = () => {
             })
             const temp = await res.json();
             console.log(temp)
-            storeLoginData(temp)
+            if(res.status===200&&temp){
+              storeLoginData(temp)
+            }
+            else{
+              console.log("Error")
+            }
+
+            
     }
     return (
         <div id="main_body">
