@@ -1,31 +1,42 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState, useEffect, useContext, useRef} from 'react';
 import { Container, Alert, Row, Card, CardBody, CardTitle } from 'reactstrap';
 import {GlobalContext} from "../../context/ProjectContext"
 
-
-const Notification = (props) => {
-    console.log(props)
-    const [msgStatus, setMsgStatus] = useState(true)
+const Notification = () => {
+    const loaded = useRef(false)
+    const [msgStatus, setMsgStatus] = useState(false)
     const [msg, setMsg] = useState("")
     const [status, setStatus] = useState("info")
+    const {notification, clearAlertData} = useContext(GlobalContext)
+
 
     useEffect(() => {
-        console.log("use Effect")
-        setMsg(props.msg)
-        setMsgStatus(props.visibility)
-        setStatus(props.code)
-    },[props])
+        if (loaded.current) {
+            if (notification.message) {
+                setMsg(notification.message)
+                setStatus(notification.code)
+                setMsgStatus(true)
+                const timer = setInterval(() => {setMsgStatus(false)
+                    clearAlertData()}, 5000)
+                return () => clearInterval(timer)
+            } else{
+                setMsgStatus(false)
+            }
+        } else{
+            loaded.current = true
+        }
+    }, [notification.message])
 
-    return (
+
+ 
+
+    return(
         <div>
-            <Alert
-                color={status}
-                isOpen={msgStatus}
-                toggle={() => setMsgStatus(!msgStatus)}
-            >
-                {msg}
-            </Alert>
+            <Alert color={status} isOpen={msgStatus} toggle={() => setMsgStatus(false)}>
+                    {msg}
+              </Alert>
         </div>
     )
 }
+
 export default Notification

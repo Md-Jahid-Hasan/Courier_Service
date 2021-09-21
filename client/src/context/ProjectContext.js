@@ -31,19 +31,38 @@ let initialState = {
     auth: {
         isAuthenticated: true,
         isLoading: false,
+    },
+    notification: {
+        message:"",
+        code:""
     }
 }
 
 const ProjectContext = () => {
     const [state, dispatch] = useReducer(reducer, initialState)
+
     const storeLoginData =(data)=>{
         return dispatch({
             type:'LOGIN_INFO',
             payload:data
         })
     }
+
+    const setAlertData = (data) => {
+        return dispatch({
+            type: 'NOTIFICATION ADD',
+            payload: data
+        })
+    }
+
+    const clearAlertData = () => {
+        return dispatch({
+            type: 'NOTIFICATION CLEAR',
+        })
+    }
+    
     return (
-        <GlobalContext.Provider value={{...state,storeLoginData}}>
+        <GlobalContext.Provider value={{...state,storeLoginData,setAlertData, clearAlertData}}>
             <BrowserRouter>
                 <Switch>
                     {indexRoutes.map((prop, key) => {

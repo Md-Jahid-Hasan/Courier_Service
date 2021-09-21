@@ -5,6 +5,7 @@ import Sidebar from './layout-components/sidebar/sidebar.jsx';
 import Footer from './layout-components/footer/footer.jsx';
 import ThemeRoutes from '../routes/routing.jsx';
 import Starter from '../views/starter/starter.jsx';
+import Notification from '../views/ui-components/Notification.jsx';
 
 import { 
     AdminPrivateRoute, SubAdminPrivateRoute,
@@ -92,6 +93,7 @@ const Fulllayout = (props) => {
             {/*--------------------------------------------------------------------------------*/}
             <div className="page-wrapper d-block">
                 <div className="page-content container-fluid">
+                    <Notification/>
                     <Switch>
                         <PrivateRoute exact path="/(|dashboard)" component={Starter}/>
                         {/* <Route exact path="/loggedin" component={Login}/> */}

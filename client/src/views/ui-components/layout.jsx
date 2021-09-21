@@ -7,12 +7,12 @@ import Notification from './Notification';
 const LayoutComponent = () => {
     const [userData, setUserData] = useState({Email: "", Username:"", Password:"", Cpassword:""})
     const [branch, setBranch] = useState([])
-    const {authenticateUser} = useContext(GlobalContext);
+    const {authenticateUser, setAlertData} = useContext(GlobalContext);
     const [createAlert, setAlert] = useState({msg:"", code:"", visibility:false})
 
     useEffect(() => {
-        if(createAlert.visibility)
-            setAlert({...createAlert, visibility:false})
+        if(createAlert.visibility && !(createAlert.code === "success"))
+            setAlert({...createAlert, visibility:false, code: "info"})
     }, [userData])
     
 
@@ -50,7 +50,7 @@ const LayoutComponent = () => {
 
     const handleUserData = async(e) => {
         e.preventDefault()
-        let count = 0;
+        
         if(authenticateUser.IsSuperAdmin){
             userData['IsAdmin'] = true
         }
@@ -68,11 +68,11 @@ const LayoutComponent = () => {
         const temp = await res.json()
         if(res.status === 200){
             setAlert({...createAlert, msg:"User Create Successfully", code:"success", visibility:true})
-
+            setAlertData({message: "User Create Successfilly", code: "success"})
+            setUserData({Email: "", Username:"", Password:"", Cpassword:""})
         } else{
-           
-                setAlert({...createAlert, msg:temp.message, code:"danger", visibility:true})
-            
+            setAlert({...createAlert, msg:temp.message, code:"danger", visibility:true})
+            setAlertData({message: temp.message, code: "danger"})
         }
 
         console.log(userData)
@@ -89,7 +89,7 @@ const LayoutComponent = () => {
 
                 <CardBody className="">
                     <Container>
-                        {createAlert.visibility && <Notification {...createAlert} />}
+                        {/* <Notification {...createAlert} /> */}
                    
                         <div class="container-fluid">
                             <div class="row d-flex justify-content-center align-items-center m-0">
@@ -131,7 +131,7 @@ const LayoutComponent = () => {
                                             Enter Your Branch
                                         </option>
                                         {branch.map((x, key) => 
-                                            <option value={x._id}>{x.branch}</option>
+                                            <option key={key} value={x._id}>{x.branch}</option>
                                         )}
                                         
                                         </select>
