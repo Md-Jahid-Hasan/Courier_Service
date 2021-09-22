@@ -5,6 +5,7 @@ import {GlobalContext} from '../../context/ProjectContext';
 
 const LoginPrivateRoute = ({component: Component, ...rest}) => {
     const {auth} = useContext(GlobalContext)
+    console.log(auth)
     return (
     <div>
         <Route {...rest} render={
