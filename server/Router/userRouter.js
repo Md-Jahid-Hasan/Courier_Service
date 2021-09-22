@@ -106,7 +106,7 @@ const login = async (req, res) => {
 
     res.status(200).send({
         token: token,
-        user: _.pick(result, ['_id', 'Email','IsAdmin','IsSuperAdmin','branch'])
+        user: _.pick(user, ['_id', 'Email','IsAdmin','IsSuperAdmin','branch'])
     })
 
 }

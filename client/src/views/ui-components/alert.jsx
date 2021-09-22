@@ -164,7 +164,7 @@ const Alerts = () => {
                             toggle={onDismiss.bind(null)}
                         >
                             I am an alert and I can be dismissed!
-              </Alert>
+                        </Alert>
                     </div>
                 </CardBody>
             </Card>
