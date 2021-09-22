@@ -9,7 +9,7 @@ import Starter from '../views/starter/starter.jsx';
 import { 
     AdminPrivateRoute, SubAdminPrivateRoute,
      PrivateRoute, LoginPrivateRoute } from '../routes/auth-route/index.js';
-
+import Updateprofile from '../authentication/Updateprofile.js';
 import Login from "../authentication/Login"
 import Alerts from '../views/ui-components/alert.jsx';
 import Badges from '../views/ui-components/badge.jsx';
@@ -95,6 +95,7 @@ const Fulllayout = (props) => {
                     <Switch>
                         <PrivateRoute exact path="/(|dashboard)" component={Starter}/>
                         <Route exact path="/loggedin" component={Login}/>
+                        <Route exact path="/updateProfile" component={Updateprofile}/>
                         <LoginPrivateRoute exact path="/login" component={Login}/>
                         <PrivateRoute exact path="/branch-data" component={Alerts}/>
                         <PrivateRoute exact path="/all-branch" component={Badges}/>

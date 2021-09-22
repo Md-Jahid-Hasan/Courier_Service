@@ -67,7 +67,10 @@ const Header = () => {
                             </DropdownToggle>
                             <DropdownMenu right className="user-dd">
                                 <DropdownItem>
-                                    <i className="ti-user mr-1 ml-1" /> My Account
+                                <NavLink className="nav-link" to="/updateProfile">
+                                    {/* <i className="ti-email mr-1 ml-1" /> Login */}
+                                    <span className="ti-email hide-menu "style={{color:"black"}}>My Account</span>
+                                    </NavLink>
                   </DropdownItem>
                                 <DropdownItem>
                                     <i className="ti-wallet mr-1 ml-1" /> My Balance
