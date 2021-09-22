@@ -12,8 +12,7 @@ const userSchema = new Schema({
         required: true
     },
     Cpassword: {
-        type: String,
-        required: true
+        type: String
     },
     Email:{
         type:String,

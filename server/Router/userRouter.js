@@ -98,12 +98,12 @@ const login = async (req, res) => {
 
     const token = user.generateJWT();
 
-    console.log(token)
     res.cookie("jwtoken", token, {
         expires: new Date(Date.now() + 25892000000),
-        httpOnly: true
+        // httpOnly: true
     });
-    // const result = await user.save();
+    const result = await user.save();
+
     res.status(200).send({
         token: token,
         user: _.pick(user, ['_id', 'Email','IsAdmin','IsSuperAdmin','branch'])

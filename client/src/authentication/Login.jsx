@@ -38,6 +38,7 @@ const Login = () => {
                     Accept: "application/json",
                     "Content-Type": "application/json"
                 },
+                credentials:'include',
                 body: JSON.stringify({
                     email, password
                 })
@@ -83,12 +84,15 @@ const Login = () => {
                     </div>
                   </div>
                 </div>
+
                
                 <div class="col-12" id="loginbtnDiv">
                   <button className="btn btn" type="submit" id="signinbtn" name="signin" onClick={Loggedin}>Login</button>
                 </div>
+
               </div>
             </form>
+            
           </div>
         </div>
       </div>
