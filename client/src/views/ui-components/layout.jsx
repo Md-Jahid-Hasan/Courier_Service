@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useContext} from 'react';
-import { Container, Alert, Row, Card, CardBody, CardTitle } from 'reactstrap';
+import { Container, Card, CardBody, CardTitle } from 'reactstrap';
 import {GlobalContext} from "../../context/ProjectContext"
-import Notification from './Notification';
+
 
 
 const LayoutComponent = () => {

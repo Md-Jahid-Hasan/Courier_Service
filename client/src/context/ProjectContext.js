@@ -19,6 +19,8 @@ export const GlobalContext = createContext()
 
 let initialState = {
     authenticateUser: {
+        _id:"",
+        Username:"",
         Email:"",
         IsAdmin:Boolean,
         IsSuperadmin:Boolean,
@@ -60,9 +62,16 @@ const ProjectContext = () => {
             type: 'NOTIFICATION CLEAR',
         })
     }
+
+    const updateUser =(data)=>{
+        return dispatch({
+            type: 'UPDATE_USER',
+            payload:data
+        })
+    }
     
     return (
-        <GlobalContext.Provider value={{...state,storeLoginData,setAlertData, clearAlertData}}>
+        <GlobalContext.Provider value={{...state,storeLoginData,setAlertData, clearAlertData,updateUser}}>
             <BrowserRouter>
                 <Switch>
                     {indexRoutes.map((prop, key) => {
