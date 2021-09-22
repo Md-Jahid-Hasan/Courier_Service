@@ -10,7 +10,7 @@ import Notification from '../views/ui-components/Notification.jsx';
 import { 
     AdminPrivateRoute, SubAdminPrivateRoute,
      PrivateRoute, LoginPrivateRoute } from '../routes/auth-route/index.js';
-
+import Updateprofile from '../authentication/Updateprofile.js';
 import Login from "../authentication/Login"
 import Alerts from '../views/ui-components/alert.jsx';
 import Badges from '../views/ui-components/badge.jsx';
