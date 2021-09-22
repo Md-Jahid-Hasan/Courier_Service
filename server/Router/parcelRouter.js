@@ -7,7 +7,6 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const {Branch} =require('../models/branchModel');
 const toId = mongoose.Types.ObjectId
-const moment = require('moment')
 
 const newParcel = async (req,res)=>{
     try{
@@ -33,7 +32,7 @@ const newParcel = async (req,res)=>{
 const getParcel = async (req,res)=>{
     try{
         // .populate("BookedFrom SendTo BookedBy","branch contact Username Email" )
-        const parcels = await Parcel.findById(req.params.parcelid).populate("BookedFrom SendTo BookedBy","branch contact Username Email" )
+        const parcels = await Parcel.findById(req.params.parcelid).populate("BookedFrom ","branch" )
         // console.log(parcels)
         if(!parcels) return res.status(400).json({message:"Parcel Not Found"})
         const bookedBranch = await Branch.findById({_id:parcels.BookedFrom._id})
@@ -94,7 +93,7 @@ const sortedData = async(req,res)=>{
 console.log(obj)
 
   Parcel
-   .find()
+   .find().populate("BookedFrom SendTo","branch")
    .sort(obj)
    .exec(function(err, parcels) {
       if(err){
@@ -222,9 +221,7 @@ const getData = async(req,res)=>{
                 }
                
             },
-            // {
-            //     $count:"Total_Weekly_Delivery", 
-            // },
+   
 
             {
                 $addFields:{week_day:'$_id'}
@@ -245,7 +242,6 @@ const getData = async(req,res)=>{
             {
                 $match:{status:"Delivered"}
             },
-            // "$BookedFrom":"61403763c29ff81e12e79872"
             {
                 $group:{
                     _id:{
