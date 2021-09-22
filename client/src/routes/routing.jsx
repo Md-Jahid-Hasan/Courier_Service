@@ -60,8 +60,8 @@ var ThemeRoutes = [
         component: PopoverComponent
     },
     {
-        path: '/tooltip',
-        name: 'Toltips',
+        path: '/parcel-list',
+        name: 'Parcel List',
         icon: 'mdi mdi-image-filter-vintage',
         component: TooltipComponent
     },

@@ -105,7 +105,7 @@ const Fulllayout = (props) => {
                         <PrivateRoute exact path="/create-employee" component={LayoutComponent}/>
                         <PrivateRoute exact path="/pagination" component={PaginationComponent}/>
                         <AdminPrivateRoute exact path="/popover" component={PopoverComponent}/>
-                        <SubAdminPrivateRoute exact path="/tooltip" component={TooltipComponent}/>
+                        <SubAdminPrivateRoute exact path="/parcel-list" component={TooltipComponent}/>
                         {/* {ThemeRoutes.map((prop, key) => {
                             if (prop.redirect) {
                                 return <Redirect from={prop.path} to={prop.pathTo} key={key} />;
