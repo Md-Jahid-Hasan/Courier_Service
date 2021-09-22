@@ -64,13 +64,14 @@ const getUser = async(req,res)=>{
 
 const updateUser = async (req,res)=>{
     const id = req.params.id
+    console.log(id)
     const updatedData = req.body
     try{
         const user = await User.findByIdAndUpdate(id,updatedData,{new:true})
         if(!user) return res.status(400).json({message:"Id Not Found"})
         return res.status(200).send(user)
     }catch(err){
-        return res.status(400).send("ID Not Found")
+        return res.status(400).json({message:"Something Went Wrong"})
     }
 
 }
@@ -106,7 +107,7 @@ const login = async (req, res) => {
 
     res.status(200).send({
         token: token,
-        user: _.pick(user, ['_id', 'Email','IsAdmin','IsSuperAdmin','branch'])
+        user: _.pick(result, ['_id','Username' ,'Email','IsAdmin','IsSuperAdmin','branch'])
     })
 
 }
