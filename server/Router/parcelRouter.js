@@ -701,7 +701,6 @@ const SelfData = async(req,res)=>{
 
 const generateProductId =async (req,res)=>{
     let r = (Math.random() + 1).toString(36).substring(7);
-    console.log(typeof(r));
     const parcel = await Parcel.findOne({ProductType:r})
     if(parcel) return res.status(400).json({mesage:"This Id Is already Exists.Click Again to get new Id"})
     return res.status(200).send({
