@@ -89,6 +89,7 @@ const deleteUser = async (req,res)=>{
 
 }
 
+
 const login = async (req, res) => {
     const { email, password } = req.body
     if (!email || !password) return res.status(400).json({message:"fill the empty field"});
@@ -124,5 +125,6 @@ router.route('/userApi/user/delete/:id')
     .delete(deleteUser)
 router.route('/userApi/login')
     .post(login)
+
 module.exports = router;
 
