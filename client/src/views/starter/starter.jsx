@@ -1,79 +1,49 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {
-    Card,
-    CardImg,
-    CardText,
-    CardBody,
-    CardTitle,
-    CardSubtitle,
-    Button,
-    Row,
-    Col
+    Row, Button,
+    Col, CardBody
 } from 'reactstrap';
-import { TotalRevenue, Projects, Feeds } from '../../components/dashboard';
+import { Projects } from '../../components/dashboard';
+import Cards from '../ui-components/cards';
 
-import img1 from '../../assets/images/big/img1.jpg';
-import img2 from '../../assets/images/big/img2.jpg';
-import img3 from '../../assets/images/big/img3.jpg';
 
 const Starter = () => {
+    const [sortParam, setSortParam] = useState('createdAt')
+    const [parcels, setParcels] = useState([])
+    
+    useEffect(() => {
+        fetch(`http://localhost:4000/parcelApi/deleteParcel/sorted?sortBy=${sortParam}:desc`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+            .then(response => response.json())
+            .then(data => setParcels(data.data))
+    },[sortParam])
+
     return (
         <div>
-            <Row>
-                <Col sm={6} lg={8}>
-                    <TotalRevenue />
-                </Col>
-                <Col sm={6} lg={4}>
-                    <Feeds />
-                </Col>
-            </Row>
+            <Cards/>
             <Row>
                 <Col sm={12}>
-                    <Projects />
-                </Col>
-            </Row>
-            <Row>
-                <Col xs="12" md="4">
-                    {/*--------------------------------------------------------------------------------*/}
-                    {/*Card-1*/}
-                    {/*--------------------------------------------------------------------------------*/}
-                    <Card>
-                        <CardImg top width="100%" src={img1} />
-                        <CardBody>
-                            <CardTitle>Card title</CardTitle>
-                            <CardSubtitle>Card subtitle</CardSubtitle>
-                            <CardText>Some quick example text to build on the card title and make up the bulk of the card's content.</CardText>
-                            <Button>Button</Button>
-                        </CardBody>
-                    </Card>
-                </Col>
-                <Col xs="12" md="4">
-                    {/*--------------------------------------------------------------------------------*/}
-                    {/*Card-1*/}
-                    {/*--------------------------------------------------------------------------------*/}
-                    <Card>
-                        <CardImg top width="100%" src={img2} />
-                        <CardBody>
-                            <CardTitle>Card title</CardTitle>
-                            <CardSubtitle>Card subtitle</CardSubtitle>
-                            <CardText>Some quick example text to build on the card title and make up the bulk of the card's content.</CardText>
-                            <Button>Button</Button>
-                        </CardBody>
-                    </Card>
-                </Col>
-                <Col xs="12" md="4">
-                    {/*--------------------------------------------------------------------------------*/}
-                    {/*Card-1*/}
-                    {/*--------------------------------------------------------------------------------*/}
-                    <Card>
-                        <CardImg top width="100%" src={img3} />
-                        <CardBody>
-                            <CardTitle>Card title</CardTitle>
-                            <CardSubtitle>Card subtitle</CardSubtitle>
-                            <CardText>Some quick example text to build on the card title and make up the bulk of the card's content.</CardText>
-                            <Button>Button</Button>
-                        </CardBody>
-                    </Card>
+                <CardBody className="">
+                    <div className="button-group d-flex justify-content-around">
+                        <Button className="btn" color="info" onClick={() => setSortParam("Booked")}>
+                                Booked
+                        </Button>
+                        <Button className="btn" color="primary" onClick={() => setSortParam("Send")}>
+                                Send
+                        </Button>
+                        <Button className="btn" color="warning" onClick={() => setSortParam("Recieved")}>
+                                Recieved
+                        </Button>
+                        <Button className="btn" color="success" onClick={() => setSortParam("Delivered")}>
+                                Delivered
+                         </Button>    
+                    </div>
+                </CardBody>
+                    <Projects parcel={parcels}/>
                 </Col>
             </Row>
         </div>

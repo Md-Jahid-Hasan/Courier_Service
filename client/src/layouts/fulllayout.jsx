@@ -67,6 +67,7 @@ const Fulllayout = (props) => {
         };
     }, [width]);
 
+
     /*--------------------------------------------------------------------------------*/
     /* Theme Setting && Layout Options wiil be Change From Here                       */
     /*--------------------------------------------------------------------------------*/
@@ -96,8 +97,8 @@ const Fulllayout = (props) => {
                     <Notification/>
                     <Switch>
                         <PrivateRoute exact path="/(|dashboard)" component={Starter}/>
-                        <Route exact path="/loggedin" component={Login}/>
-                        {/* <LoginPrivateRoute exact path="/(login|loggedin)" component={Login}/> */}
+                        {/* <Route exact path="/loggedin" component={Login}/> */}
+                        <LoginPrivateRoute exact path="/(login|loggedin)" component={Login}/>
                         <Route exact path="/updateProfile" component={Updateprofile}/>
                         <PrivateRoute exact path="/branch-data" component={Alerts}/>
                         <PrivateRoute exact path="/all-branch" component={Badges}/>

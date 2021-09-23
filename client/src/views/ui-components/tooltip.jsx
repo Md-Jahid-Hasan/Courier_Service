@@ -12,10 +12,11 @@ import moment from 'moment'
 
 const TooltipComponent = () => {
     const [parcls, setParcel] = useState([])
+    const [sortParam, setSortParam] = useState('createdAt')
 
     useEffect(() => {
         const getParcelData = async() => {
-            const res = await fetch('http://localhost:4000/parcelApi/deleteParcel/sorted?sortBy=createdAt:desc', {
+            const res = await fetch(`http://localhost:4000/parcelApi/deleteParcel/sorted?sortBy=${sortParam}:desc`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json"
@@ -26,7 +27,11 @@ const TooltipComponent = () => {
             setParcel(temp.data)
         }
         getParcelData()
-    },[])
+    },[sortParam])
+
+    const changeSortParam = (event) =>{
+        setSortParam(event.target.value)
+    }
 
     return (
         <div>
@@ -38,9 +43,9 @@ const TooltipComponent = () => {
                 <div className="d-md-flex no-block">
                     <CardTitle>Projects of the Month</CardTitle>
                     <div className="ml-auto">
-                        <select className="custom-select">
-                            <option defaultValue>Sort Based on Date</option>
-                            <option value="1">Sort Based on Status</option>
+                        <select className="custom-select" onChange={(e) => changeSortParam(e)}>
+                            <option value="createdAt">Sort Based on Date</option>
+                            <option value="status">Sort Based on Status</option>
                         </select>
                     </div>
                 </div>

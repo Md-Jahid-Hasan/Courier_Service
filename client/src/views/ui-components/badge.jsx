@@ -1,5 +1,6 @@
 import React from 'react';
 import { Badge, Button, Card, CardBody, CardTitle, Row, Col } from 'reactstrap';
+import { TotalRevenue } from '../../components/dashboard';
 
 const Badges = () => {
     return (
@@ -8,6 +9,12 @@ const Badges = () => {
             {/* Row*/}
             {/* --------------------------------------------------------------------------------*/}
             <Row>
+                <Col sm={12} lg={12}>
+                    <TotalRevenue />
+                </Col>
+            </Row>
+            <Row>
+
                 <Col xs="12" md="12" sm="12">
                     {/* --------------------------------------------------------------------------------*/}
                     {/* Card-1*/}

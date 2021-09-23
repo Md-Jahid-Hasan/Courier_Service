@@ -37,6 +37,9 @@ export const reducer = (state, action) => {
                 Username:state.authenticateUser.Username,
                 Email:state.authenticateUser.Email,
             }
+        case 'LOGIN_REDIRECT':
+            state.auth.isAuthenticated = true
+            return{...state, isAuthenticated:true}
             
         default:
             return {...state}

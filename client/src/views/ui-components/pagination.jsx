@@ -1,23 +1,17 @@
-import React, {useState, useEffect} from 'react';
-import {
-    Pagination,
-    PaginationItem,
-    PaginationLink,
-    Card,
-    CardBody,
-    CardTitle,
-    Row,
-    Col
-} from 'reactstrap';
+import React, {useState, useEffect, useContext} from 'react';
+import DatePicker from "react-datepicker";
+import {GlobalContext} from "../../context/ProjectContext"
+import "react-datepicker/dist/react-datepicker.css";
 
 
 const PaginationComponent = () => {
 
     const [parcelData, setParcelData] = useState({
         SenderName:"", SenderNumber:"", BookedFrom:"", RecieverName:"", RecieverNumber:"",
-        SendTo:"", ProductType:"", TotalCost:0, PaidAmount:0, PayableAmount: 0,
+        SendTo:"", ProductType:"", TotalCost:0, PaidAmount:0, PayableAmount: 0, ExpectedDate: new Date()
     })
     const [branch, setBranch] = useState([])
+    const {authenticateUser, setAlertData} = useContext(GlobalContext);
 
     useEffect(() => {
         const getBranchName = async() => {
@@ -41,13 +35,36 @@ const PaginationComponent = () => {
     },[parcelData.TotalCost, parcelData.PaidAmount])
 
     const changeParcelData = (event) => {
-        let name = event.target.name
         setParcelData({...parcelData, [event.target.name]:event.target.value})
     }
     
-    const handleCreateParcel = (event) => {
+    const handleCreateParcel = async(event) => {
         event.preventDefault()
         console.log(parcelData)
+  
+        for (const [key, value] of Object.entries(parcelData)) {
+          if(value === "" || value === 0){
+            return
+          }
+        }
+      
+        const res = await fetch(`http://localhost:4000/parcelApi/parcel/${parcelData.SendTo}/${parcelData.BookedFrom}/${authenticateUser._id}`, {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+              ...parcelData
+          })
+        })
+        const temp = await res.json()
+        if(res.status === 200){
+          setAlertData({message: "Parcel Create Successfully", code: "success"})
+        } else {
+          setAlertData({message: temp.message, code: "danger"})
+        }
+     
+        console.log(temp)
     }
 
     return (
@@ -63,7 +80,7 @@ const PaginationComponent = () => {
           <div class="form-group row updatefrom">
               <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">SenderNumber:</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control form-control-sm" name="SenderNumber" id="colFormLabelSm" placeholder="SenderNumber"
+                <input type="number" class="form-control form-control-sm" name="SenderNumber" id="colFormLabelSm" placeholder="SenderNumber"
                     value={parcelData.SenderNumber} onChange={(e) => changeParcelData(e)}/>
               </div>
             </div>
@@ -92,7 +109,7 @@ const PaginationComponent = () => {
             <div class="form-group row updatefrom">
               <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">ReceiverNumber:</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control form-control-sm" name="RecieverNumber" id="colFormLabelSm" placeholder="SenderNumber"
+                <input type="number" class="form-control form-control-sm" name="RecieverNumber" id="colFormLabelSm" placeholder="SenderNumber"
                 value={parcelData.RecieverNumber} onChange={(e) => changeParcelData(e)}/>
               </div>
             </div>
@@ -124,14 +141,14 @@ const PaginationComponent = () => {
             <div class="form-group row updatefrom">
               <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">TotalCost:</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control form-control-sm" name="TotalCost" id="colFormLabelSm" placeholder="TotalCost"
+                <input type="number" class="form-control form-control-sm" name="TotalCost" id="colFormLabelSm" placeholder="TotalCost"
                 value={parcelData.TotalCost} onChange={(e) => changeParcelData(e)}/>
               </div>
             </div>
             <div class="form-group row updatefrom">
               <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">PaidAmount:</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control form-control-sm" name="PaidAmount" id="colFormLabelSm" placeholder="PaidAmount"
+                <input type="number" class="form-control form-control-sm" name="PaidAmount" id="colFormLabelSm" placeholder="PaidAmount"
                 value={parcelData.PaidAmount} onChange={(e) => changeParcelData(e)}/>
               </div>
             </div>
@@ -139,13 +156,20 @@ const PaginationComponent = () => {
             <div class="form-group row updatefrom">
               <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">PayableAmount:</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control form-control-sm" name="PayableAmount" id="colFormLabelSm" placeholder="PayableAmount"
+                <input type="number" readOnly={true} class="form-control form-control-sm" name="PayableAmount" id="colFormLabelSm" placeholder="PayableAmount"
                 value={parcelData.PayableAmount}/>
               </div>
             </div>
+            <div class="form-group row updatefrom">
+              <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">PayableAmount:</label>
+              <div class="col-sm-10">
+              <DatePicker selected={parcelData.ExpectedDate} onChange={(date) => setParcelData({...parcelData, ExpectedDate:date})} />
+              </div>
+            </div>
+            
             <div class="form-group row updatefrom frombtn">
               <button type="button my-2" class="btn btn-outline-secondary">Back</button>
-              <button type="submit" class="btn btn-outline-success">Update</button>
+              <button type="submit" class="btn btn-outline-success">Create</button>
             </div>
         
         </form>
