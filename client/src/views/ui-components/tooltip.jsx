@@ -70,8 +70,8 @@ const TooltipComponent = () => {
                                     </td>
                                     
                                     <td><h6 className="font-weight-medium mb-0 nowrap">{parcel.ProductType}</h6></td>
-                                    <td>{parcel.SendTo}</td>
-                                    <td>{parcel.BookedFrom}</td>
+                                    <td>{parcel.SendTo.branch}</td>
+                                    <td>{parcel.BookedFrom.branch}</td>
                                     <td>{moment(parcel.createdAt).format('DD MMM, YYYY')}</td>
                                     <td><span className="badge badge-light-success text-success">{parcel.PayableAmount}</span></td>
                            

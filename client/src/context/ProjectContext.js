@@ -43,6 +43,7 @@ const ProjectContext = () => {
     const [state, dispatch] = useReducer(reducer, initialState)
 
     const storeLoginData =(data)=>{
+        localStorage.setItem("authUser", JSON.stringify(data))
         return dispatch({
             type:'LOGIN_INFO',
             payload:data
@@ -69,21 +70,11 @@ const ProjectContext = () => {
         })
     }
 
-    const loginRedirect = () => {
-        return dispatch({
-            type: 'LOGIN_REDIRECT'
-        })
-    }
-    
-    useEffect(() => {
-        console.log(state.auth)
-        if(Cookies.get('jwtoken')){
-            loginRedirect()
-        }
-    }, [])
+
 
     return (
-        <GlobalContext.Provider value={{...state,storeLoginData,setAlertData, clearAlertData,updateUser, loginRedirect}}>
+        <GlobalContext.Provider value={{...state,storeLoginData,setAlertData, clearAlertData,updateUser,
+        }}>
             <App/>
         </GlobalContext.Provider>
     )

@@ -1,3 +1,5 @@
+import Cookies from "js-cookie"
+
 export const reducer = (state, action) => {
     switch(action.type){
         case 'LOGIN_INFO':
@@ -8,6 +10,8 @@ export const reducer = (state, action) => {
             state.authenticateUser.IsSuperAdmin= data.user.IsSuperAdmin
             state.authenticateUser.Email=  data.user.Email
             state.authenticateUser.branch.branch= data.user.branch.branch
+            state.authenticateUser.branch.id= data.user.branch._id
+            state.authenticateUser.branch.contact= data.user.branch.contact
             console.log(state.authenticateUser.IsAdmin)
             console.log(state.authenticateUser.IsSuperAdmin)
             state.auth.isAuthenticated = true
@@ -37,9 +41,7 @@ export const reducer = (state, action) => {
                 Username:state.authenticateUser.Username,
                 Email:state.authenticateUser.Email,
             }
-        case 'LOGIN_REDIRECT':
-            state.auth.isAuthenticated = true
-            return{...state, isAuthenticated:true}
+        
             
         default:
             return {...state}

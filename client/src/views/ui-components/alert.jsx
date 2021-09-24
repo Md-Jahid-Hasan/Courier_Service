@@ -1,28 +1,34 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
     Row, Button,
     Col, CardBody
 } from 'reactstrap';
 import { Projects } from '../../components/dashboard';
 import Cards from '../ui-components/cards';
+import { GlobalContext } from '../../context/ProjectContext';
+import DatePicker from "react-datepicker";
 
 
 const Starter = () => {
-    const [sortParam, setSortParam] = useState('createdAt')
+    const [sortParam, setSortParam] = useState(new Date())
     const [parcels, setParcels] = useState([])
+    const {authenticateUser} = useContext(GlobalContext)
     
     useEffect(() => {
-        fetch(`http://localhost:4000/parcelApi/deleteParcel/sorted?sortBy=${sortParam}:desc`, {
+        fetch(`http://localhost:4000/parcelApi/branchUser/${authenticateUser._id}/${sortParam}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json"
                 }
             })
             .then(response => response.json())
-            .then(data => setParcels(data.data))
-    },[])
-
-    console.log(parcels)
+            .then(data => {
+                if(data.length !== 0)
+                    setParcels(data[0].data)
+                else setParcels([])
+            })
+    },[sortParam])
+    
     return (
         <div>
             <Cards/>
@@ -41,7 +47,10 @@ const Starter = () => {
                         </Button>
                         <Button className="btn" color="success">
                                 Delivered
-                         </Button>    
+                         </Button> 
+                         <Button className="btn p-0 m-0" color="light">
+                            <DatePicker selected={sortParam} onChange={(date) => setSortParam(date)} />   
+                         </Button>
                     </div>
                 </CardBody>
                     <Projects parcel={parcels} nav="branch history"/>

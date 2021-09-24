@@ -6,12 +6,14 @@ import "react-datepicker/dist/react-datepicker.css";
 
 const PaginationComponent = () => {
 
+    const {authenticateUser, setAlertData} = useContext(GlobalContext);
     const [parcelData, setParcelData] = useState({
-        SenderName:"", SenderNumber:"", BookedFrom:"", RecieverName:"", RecieverNumber:"",
-        SendTo:"", ProductType:"", TotalCost:0, PaidAmount:0, PayableAmount: 0, ExpectedDate: new Date()
+        SenderName:"", SenderNumber:"", BookedFrom:authenticateUser.branch.id, RecieverName:"", RecieverNumber:"",
+        SendTo:"", ProductType:"", TotalCost:0, PaidAmount:0, PayableAmount: 0, expectedDate: new Date(),
+        status: "Booked"
     })
     const [branch, setBranch] = useState([])
-    const {authenticateUser, setAlertData} = useContext(GlobalContext);
+   
 
     useEffect(() => {
         const getBranchName = async() => {
@@ -43,6 +45,8 @@ const PaginationComponent = () => {
         console.log(parcelData)
   
         for (const [key, value] of Object.entries(parcelData)) {
+          if(key === "PaidAmount" || key === "PayableAmount")
+            continue
           if(value === "" || value === 0){
             return
           }
@@ -87,10 +91,10 @@ const PaginationComponent = () => {
             <div class="form-group row updatefrom">
               <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">BookedFrom:</label>
               <div class="col-sm-10">
-                   <select className="form-control form-control-sm" id="sel1" name="BookedFrom" defaultValue={'DEFAULT'}
+                   <select className="form-control form-control-sm" id="sel1" name="BookedFrom" defaultValue={authenticateUser.branch.id}
                    onChange={(e) => changeParcelData(e)}>
-                    <option value="DEFAULT" disabled hidden>
-                        Enter Your Branch
+                    <option value={authenticateUser.branch.id} disabled hidden>
+                    {authenticateUser.branch.branch}
                     </option>
                     {branch.map((x, key) => 
                         <option key={key} value={x._id}>{x.branch}</option>
@@ -124,7 +128,7 @@ const PaginationComponent = () => {
                     Enter Your Branch
                 </option>
                 {branch.map((x, key) => 
-                    <option key={key} value={x._id}>{x.branch}</option>
+                  { return authenticateUser.branch.id !== x._id && <option key={key} value={x._id}>{x.branch}</option>}
                 )}
                 
                 </select>
@@ -163,7 +167,7 @@ const PaginationComponent = () => {
             <div class="form-group row updatefrom">
               <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">PayableAmount:</label>
               <div class="col-sm-10">
-              <DatePicker selected={parcelData.ExpectedDate} onChange={(date) => setParcelData({...parcelData, ExpectedDate:date})} />
+              <DatePicker selected={parcelData.expectedDate} onChange={(date) => setParcelData({...parcelData, expectedDate:date})} />
               </div>
             </div>
             
