@@ -41,6 +41,25 @@ body{
   outline:0px !important;
 }
 
+.updatefrom{
+  padding: 0.5rem;
+}
+  
+.updatefrom div input,select {
+    width: 50%;
+}
+.updatefrom div select {
+    width: 50%;
+}
+.frombtn {
+    justify-content: end;
+    width: 60%;
+}
+.frombtn button{
+    width: 6rem;
+    margin: 0 1rem;
+    margin-right: 0;
+  }
 
 /* Update Profile */
 body{

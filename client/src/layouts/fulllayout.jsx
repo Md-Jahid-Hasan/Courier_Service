@@ -67,6 +67,7 @@ const Fulllayout = (props) => {
         };
     }, [width]);
 
+
     /*--------------------------------------------------------------------------------*/
     /* Theme Setting && Layout Options wiil be Change From Here                       */
     /*--------------------------------------------------------------------------------*/
@@ -96,8 +97,8 @@ const Fulllayout = (props) => {
                     <Notification/>
                     <Switch>
                         <PrivateRoute exact path="/(|dashboard)" component={Starter}/>
-                        <Route exact path="/loggedin" component={Login}/>
-                        {/* <LoginPrivateRoute exact path="/(login|loggedin)" component={Login}/> */}
+                        {/* <Route exact path="/loggedin" component={Login}/> */}
+                        <LoginPrivateRoute exact path="/(login|loggedin)" component={Login}/>
                         <Route exact path="/updateProfile" component={Updateprofile}/>
                         <PrivateRoute exact path="/branch-data" component={Alerts}/>
                         <PrivateRoute exact path="/all-branch" component={Badges}/>
@@ -106,7 +107,7 @@ const Fulllayout = (props) => {
                         <PrivateRoute exact path="/create-employee" component={LayoutComponent}/>
                         <PrivateRoute exact path="/pagination" component={PaginationComponent}/>
                         <AdminPrivateRoute exact path="/popover" component={PopoverComponent}/>
-                        <SubAdminPrivateRoute exact path="/tooltip" component={TooltipComponent}/>
+                        <SubAdminPrivateRoute exact path="/parcel-list" component={TooltipComponent}/>
                         {/* {ThemeRoutes.map((prop, key) => {
                             if (prop.redirect) {
                                 return <Redirect from={prop.path} to={prop.pathTo} key={key} />;

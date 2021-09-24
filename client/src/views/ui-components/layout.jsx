@@ -91,42 +91,42 @@ const LayoutComponent = () => {
                     <Container>
                         {/* <Notification {...createAlert} /> */}
                    
-                        <div class="container-fluid">
-                            <div class="row d-flex justify-content-center align-items-center m-0">
-                            <div class="login_oueter">
+                        <div className="container-fluid">
+                            <div className="row d-flex justify-content-center align-items-center m-0">
+                            <div className="login_oueter">
                                 <form action="" method="post" id="login" autocomplete="off" 
-                                    class="bg-light border p-3" onSubmit={(e) =>handleUserData(e)}>
-                                <div class="form-row">
-                                    <h4 class="title my-3">Register For an Account</h4>
-                                    <div class="col-12">
-                                    <div class="input-group mb-3">
-                                        <div class="input-group-prepend">
-                                        <span class="input-group-text" id="basic-addon1"><i class="fas fa-user"></i></span>
+                                    className="bg-light border p-3" onSubmit={(e) =>handleUserData(e)}>
+                                <div className="form-row">
+                                    <h4 className="title my-3">Register For an Account</h4>
+                                    <div className="col-12">
+                                    <div className="input-group mb-3">
+                                        <div className="input-group-prepend">
+                                        <span className="input-group-text" id="basic-addon1"><i className="fas fa-user"></i></span>
                                         </div>
-                                        <input name="username" type="text" value={userData.Username} class="input form-control" id="username" 
+                                        <input name="username" type="text" value={userData.Username} className="input form-control" id="username" 
                                         placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" 
                                         onChange={(e) => {
                                             setUserData({...userData, Username: e.target.value})}}/>
                                     </div>
                                     </div>
-                                    <div class="col-12">
-                                    <div class="input-group mb-3">
-                                        <div class="input-group-prepend">
-                                        <span class="input-group-text" id="basic-addon1"><i class="fas fa-envelope"></i></span>
+                                    <div className="col-12">
+                                    <div className="input-group mb-3">
+                                        <div className="input-group-prepend">
+                                        <span className="input-group-text" id="basic-addon1"><i className="fas fa-envelope"></i></span>
                                         </div>
-                                        <input name="email" type="text" value={userData.Email} class="input form-control" id="email"
+                                        <input name="email" type="text" value={userData.Email} className="input form-control" id="email"
                                         placeholder="Enter Your Email" aria-label="Username" aria-describedby="basic-addon1" 
                                         onChange={(e) => setUserData({...userData, Email: e.target.value})}/>
                                     </div>
                                     </div>
 
 
-                                    <div class="col-12">
-                                    <div class="input-group mb-3">
-                                        <div class="input-group-prepend">
-                                        <span class="input-group-text" id="basic-addon1"><i class="fas fa-code-branch"></i></span>
+                                    <div className="col-12">
+                                    <div className="input-group mb-3">
+                                        <div className="input-group-prepend">
+                                        <span className="input-group-text" id="basic-addon1"><i className="fas fa-code-branch"></i></span>
                                         </div>
-                                        <select class="form-control form-control-sm" id="sel1" defaultValue={'DEFAULT'}>
+                                        <select className="form-control form-control-sm" id="sel1" defaultValue={'DEFAULT'}>
                                         <option value="DEFAULT" disabled hidden>
                                             Enter Your Branch
                                         </option>
@@ -139,41 +139,41 @@ const LayoutComponent = () => {
                                     </div>
 
 
-                                    <div class="col-12">
-                                    <div class="input-group mb-3">
-                                        <div class="input-group-prepend">
-                                        <span class="input-group-text" id="basic-addon1"><i class="fas fa-lock"></i></span>
+                                    <div className="col-12">
+                                    <div className="input-group mb-3">
+                                        <div className="input-group-prepend">
+                                        <span className="input-group-text" id="basic-addon1"><i className="fas fa-lock"></i></span>
                                         </div>
-                                        <input name="password" type="password" value={userData.Password} class="input form-control" id="password" 
+                                        <input name="password" type="password" value={userData.Password} className="input form-control" id="password" 
                                         placeholder="password" required aria-label="password" aria-describedby="basic-addon1" 
                                         onChange={(e) => setUserData({...userData, Password: e.target.value})}/>
-                                        <div class="input-group-append">
-                                        <span class="input-group-text" onClick={() => password_show_hide()}>
-                                            <i class="fas fa-eye" id="show_eye"></i>
-                                            <i class="fas fa-eye-slash d-none" id="hide_eye"></i>
+                                        <div className="input-group-append">
+                                        <span className="input-group-text" onClick={() => password_show_hide()}>
+                                            <i className="fas fa-eye" id="show_eye"></i>
+                                            <i className="fas fa-eye-slash d-none" id="hide_eye"></i>
                                         </span>
                                         </div>
                                     </div>
                                     </div>
-                                    <div class="col-12">
-                                    <div class="input-group mb-3">
-                                        <div class="input-group-prepend">
-                                        <span class="input-group-text" id="basic-addon1"><i class="fas fa-lock"></i></span>
+                                    <div className="col-12">
+                                    <div className="input-group mb-3">
+                                        <div className="input-group-prepend">
+                                        <span className="input-group-text" id="basic-addon1"><i className="fas fa-lock"></i></span>
                                         </div>
-                                        <input name="confirm password" type="password" value={userData.Cpassword} class="input form-control" id="confirm password" 
+                                        <input name="confirm password" type="password" value={userData.Cpassword} className="input form-control" id="confirm password" 
                                         placeholder="confirm password" required aria-label="password" aria-describedby="basic-addon1" 
                                         onChange={(e) => setUserData({...userData, Cpassword: e.target.value})}/>
-                                        <div class="input-group-append">
-                                        <span class="input-group-text" onClick={() => password_show_hide()}>
-                                            <i class="fas fa-eye" id="show_eye"></i>
-                                            <i class="fas fa-eye-slash d-none" id="hide_eye"></i>
+                                        <div className="input-group-append">
+                                        <span className="input-group-text" onClick={() => password_show_hide()}>
+                                            <i className="fas fa-eye" id="show_eye"></i>
+                                            <i className="fas fa-eye-slash d-none" id="hide_eye"></i>
                                         </span>
                                         </div>
                                     </div>
                                     </div>
                                 
-                                    <div class="col-12" id="loginbtnDiv">
-                                    <button class="btn btn" type="submit" id="signinbtn" name="signin">Login</button>
+                                    <div className="col-12" id="loginbtnDiv">
+                                    <button className="btn btn" type="submit" id="signinbtn" name="signin">Login</button>
                                     </div>
                                 </div>
                                 </form>

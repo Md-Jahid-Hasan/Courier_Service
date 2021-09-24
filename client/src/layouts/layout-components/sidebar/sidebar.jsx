@@ -1,10 +1,11 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import { NavLink } from 'react-router-dom';
 import { Nav } from 'reactstrap';
 import PerfectScrollbar from 'react-perfect-scrollbar'
+import {GlobalContext} from '../../../context/ProjectContext'
 
 const Sidebar = (props) => {
-
+    const {authenticateUser} = useContext(GlobalContext)
     /*--------------------------------------------------------------------------------*/
     /*To Expand SITE_LOGO With Sidebar-Menu on Hover                                  */
     /*--------------------------------------------------------------------------------*/
@@ -28,7 +29,7 @@ const Sidebar = (props) => {
                     {/*--------------------------------------------------------------------------------*/}
                     <Nav id="sidebarnav">
                         {props.routes.map((prop, key) => {
-                            if (prop.redirect) {
+                            if ((prop.permission === "employee") && (authenticateUser.IsAdmin || authenticateUser.IsSuperadmin)) {
                                 return null;
                             }
                             else {
@@ -39,7 +40,9 @@ const Sidebar = (props) => {
                                     <li className={activeRoute(prop.path) + (prop.pro ? ' active active-pro' : '') + ' sidebar-item'} key={key}>
                                         <NavLink to={prop.path} className="sidebar-link" activeClassName="active">
                                             <i className={prop.icon} />
-                                            <span className="hide-menu">{prop.name}</span>
+                                                <span className="hide-menu">
+                                                    {prop.name === "Create" ? authenticateUser.IsAdmin ? `${prop.name} Employee`: `${prop.name} Admin` :prop.name}
+                                                </span>
                                         </NavLink>
                                     </li>
                                 );

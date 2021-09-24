@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext, useRef} from 'react';
-import { Container, Alert, Row, Card, CardBody, CardTitle } from 'reactstrap';
+import { Alert } from 'reactstrap';
 import {GlobalContext} from "../../context/ProjectContext"
 
 const Notification = () => {
