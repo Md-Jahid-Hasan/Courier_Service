@@ -19,7 +19,7 @@ import profilephoto from '../../../assets/images/users/1.jpg';
 import { GlobalContext } from '../../../context/ProjectContext';
 
 const Header = () => {
-    //const {logOutUser} = useContext(GlobalContext)
+    const {logOutUser} = useContext(GlobalContext)
 
     /*--------------------------------------------------------------------------------*/
     /*To open SIDEBAR-MENU in MOBILE VIEW                                             */
@@ -90,7 +90,7 @@ const Header = () => {
                                     <i className="ti-settings mr-1 ml-1" /> Account Settings
                   </DropdownItem>
                                 <DropdownItem divider />
-                                <DropdownItem >
+                                <DropdownItem  onClick={() => logOutUser()}>
                                     <i className="fa fa-power-off mr-1 ml-1"/> Logout
                   </DropdownItem>
                                 <DropdownItem divider />

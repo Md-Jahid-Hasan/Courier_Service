@@ -21,6 +21,8 @@ const newParcel = async (req,res)=>{
         //     check:SenderName
         // })
         // .json({message:"All Field Must Be Filled Up"})
+        parcel = await Parcel.findOne({SearchId:req.body.SearchId})
+        if(parcel) return res.status(400).json({message:"This ID is already Exists"})
         parcel = new Parcel(req.body);
         parcel.BookedFrom =req.params.to
         parcel.SendTo =req.params.send
@@ -704,7 +706,7 @@ const SelfData = async(req,res)=>{
 const generateProductId =async (req,res)=>{
     let r = (Math.random() + 1).toString(36).substring(7);
     console.log(typeof(r));
-    const parcel = await Parcel.findOne({ProductType:r})
+    const parcel = await Parcel.findOne({SearchId:r})
     if(parcel) return res.status(400).json({mesage:"This Id Is already Exists.Click Again to get new Id"})
     return res.status(200).send({
         searchId:r

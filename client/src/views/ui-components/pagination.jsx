@@ -10,7 +10,7 @@ const PaginationComponent = () => {
     const [parcelData, setParcelData] = useState({
         SenderName:"", SenderNumber:"", BookedFrom:authenticateUser.branch.id, RecieverName:"", RecieverNumber:"",
         SendTo:"", ProductType:"", TotalCost:0, PaidAmount:0, PayableAmount: 0, expectedDate: new Date(),
-        status: "Booked"
+        status: "Booked", SearchId: ""
     })
     const [branch, setBranch] = useState([])
    
@@ -23,6 +23,16 @@ const PaginationComponent = () => {
                     "Content-Type": "application/json"
                 }
             }) 
+
+            const res_id = await fetch('http://localhost:4000/parcelApi/generateId', {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json"
+              }
+            })
+            const temp_id =await res_id.json()
+            console.log(temp_id)
+            setParcelData({...parcelData, SearchId:temp_id.searchId})
 
             const temp = await res.json()
             setBranch(temp)
@@ -73,7 +83,17 @@ const PaginationComponent = () => {
 
     return (
         <div class="container">
+          
         <form onSubmit={(e)=>handleCreateParcel(e)}>
+
+        <div class="form-group row updatefrom">
+            <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">ID:</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control form-control-sm" name="SearchId" id="colFormLabelSm" placeholder="SenderName" 
+              value={parcelData.SearchId} onChange={(e) => changeParcelData(e)}/>
+            </div>
+          </div>
+
           <div class="form-group row updatefrom">
             <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">SenderName:</label>
             <div class="col-sm-10">

@@ -41,7 +41,7 @@ export const reducer = (state, action) => {
                 Username:state.authenticateUser.Username,
                 Email:state.authenticateUser.Email,
             }
-        
+  
             
         default:
             return {...state}
