@@ -41,7 +41,15 @@ export const reducer = (state, action) => {
                 Username:state.authenticateUser.Username,
                 Email:state.authenticateUser.Email,
             }
-  
+        case 'LOGIN_REDIRECT':
+            state.auth.isAuthenticated = true
+            return{...state, isAuthenticated:true}
+
+        case 'LOGOUT_USER':
+            Cookies.remove('jwtoken')
+            localStorage.removeItem('authUser')
+            state.auth.isAuthenticated = false
+            return{...state}
             
         default:
             return {...state}

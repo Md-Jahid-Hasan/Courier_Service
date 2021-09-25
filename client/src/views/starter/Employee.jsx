@@ -44,7 +44,7 @@ const Employee = () => {
     const setSearchData = () => {
         setSearch(document.getElementsByName('search')[0].value)
     }
-    console.log(sortParam)
+  
     return (
         <div>
             <Cards/>

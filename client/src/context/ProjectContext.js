@@ -70,11 +70,31 @@ const ProjectContext = () => {
         })
     }
 
- 
+    const loginRedirect = () => {
+        let data = JSON.parse(localStorage.getItem("authUser"))
+        console.log(data)
+        return dispatch({
+            type:'LOGIN_INFO',
+            payload:data
+        })
+    }
+
+    const logOutUser = () => {
+        return dispatch({
+            type:'LOGOUT_USER',
+        })
+    }
+    
+    
+    useEffect(() => {
+        if(Cookies.get('jwtoken')){
+            loginRedirect()
+        }
+    }, [])
 
     return (
-        <GlobalContext.Provider value={{...state,storeLoginData,setAlertData, clearAlertData,updateUser,
-        }}>
+        <GlobalContext.Provider value={{...state,storeLoginData,setAlertData, clearAlertData,updateUser, loginRedirect,
+        logOutUser}}>
             <App/>
         </GlobalContext.Provider>
     )

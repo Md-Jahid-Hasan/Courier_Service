@@ -123,9 +123,11 @@ const TooltipComponent = (props) => {
                                     <td><span 
                                     className={`badge badge-light-${parcel.PayableAmount===0?"success":"danger"} text-${parcel.PayableAmount===0?"success":"danger"}`}>
                                         {parcel.PayableAmount}</span></td>
-                                    <td><span 
+                                    {/* <td><span 
                                     className="badge badge-light-success text-success">
-                                        {parcel.PaidAmount}</span></td>
+                                        {parcel.PaidAmount}</span></td> */}
+                                    <td className="badge badge-light-success text-success m-">
+                                    {parcel.PaidAmount}</td>
                                     {props.nav ? statusShow(parcel.status) :  props.dataStatus === "Sent" || props.dataStatus === "Delivered" ? null :<td>
                                         <Button className=" btn btn-sm" color="danger" onClick={() => chageParcelStatus(parcel.status, parcel._id)}>
                                             Change Status

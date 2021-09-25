@@ -14,7 +14,7 @@ const Starter = () => {
     const [parcels, setParcels] = useState([])
     const [loading, setloading] = useState(false)
     const [search, setSearch] = useState("")
-    const [status, setStatus] = useState('Booked')
+    const [status, setStatus] = useState('')
     const {authenticateUser} = useContext(GlobalContext)
     
     useEffect(() => {
@@ -31,12 +31,22 @@ const Starter = () => {
                     setParcels(data[0].data)
                 else setParcels([])
                 setloading(false)
+                console.log("1st")
             })
-    },[sortParam])
+            .then(data => console.log("testing", data))
+        if(status !== ""){
+            let temp = parcels
+            temp = temp.filter(i => i.status === status)
+            setParcels(temp)
+        }
+    },[sortParam, status])
+
 
     const setSearchData = () => {
         setSearch(document.getElementsByName('search')[0].value)
     }
+
+    
     
     return (
         <div>
@@ -53,6 +63,7 @@ const Starter = () => {
                         </div>
                             <div className="form-group col-md-3">
                                 <select className="custom-select"  onChange={(e) => setStatus(e.target.value)}>
+                                    <option value="">Search By Status </option>
                                     <option value="Booked">Booked Parcel</option>
                                     <option value="Sent">Send Parcel</option>
                                     <option value="Recieved">Recieved Parcel</option>
