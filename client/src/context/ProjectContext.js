@@ -1,8 +1,6 @@
-import React, {useReducer, createContext} from 'react'
+import React, {useReducer, createContext, useEffect} from 'react'
 import { reducer } from '../reducer/reducer'
-import indexRoutes from '../routes';
-import {  Route, Switch } from 'react-router-dom';
-import { BrowserRouter } from 'react-router-dom'
+import App from "../App"
 
 export const GlobalContext = createContext()
 
@@ -31,7 +29,7 @@ let initialState = {
         }
     },
     auth: {
-        isAuthenticated: true,
+        isAuthenticated: false,
         isLoading: false,
     },
     notification: {
@@ -44,6 +42,7 @@ const ProjectContext = () => {
     const [state, dispatch] = useReducer(reducer, initialState)
 
     const storeLoginData =(data)=>{
+        localStorage.setItem("authUser", JSON.stringify(data))
         return dispatch({
             type:'LOGIN_INFO',
             payload:data
@@ -62,23 +61,20 @@ const ProjectContext = () => {
             type: 'NOTIFICATION CLEAR',
         })
     }
-
+    
     const updateUser =(data)=>{
         return dispatch({
             type: 'UPDATE_USER',
             payload:data
         })
     }
-    
+
+
+
     return (
-        <GlobalContext.Provider value={{...state,storeLoginData,setAlertData, clearAlertData,updateUser}}>
-            <BrowserRouter>
-                <Switch>
-                    {indexRoutes.map((prop, key) => {
-                        return <Route path={prop.path} key={key} component={prop.component} />;
-                    })}
-                </Switch>
-            </BrowserRouter>
+        <GlobalContext.Provider value={{...state,storeLoginData,setAlertData, clearAlertData,updateUser,
+        }}>
+            <App/>
         </GlobalContext.Provider>
     )
 }

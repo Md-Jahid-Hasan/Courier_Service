@@ -1,94 +1,135 @@
-import React from "react";
-
-import img2 from '../../../assets/images/users/2.jpg';
-
+import React, { useState, useEffect, useContext } from 'react';
 import {
     Card,
     CardBody,
-    CardTitle
+    CardTitle,
+    Button
 } from 'reactstrap';
+import moment from 'moment'
+import {GlobalContext} from "../../../context/ProjectContext"
+import CircleLoader from "react-spinners/CircleLoader";
 
-const Projects = () => {
+const TooltipComponent = (props) => {
+    const [parcels, setParcel] = useState([])
+    const [sortParam, setSortParam] = useState('createdAt')
+    const {authenticateUser, setAlertData, auth} = useContext(GlobalContext);
+
+   
+    useEffect(() => {
+        setParcel(props.parcel)
+    },[props.parcel])
+
+    const chageParcelStatus = async (status, id) => {
+        let tag = ""
+        if(status === "Booked"){
+            tag = "Sent"
+        }
+        else if(status === "Sent"){
+            tag = "Recieved"
+        }
+        else if(status === "Recieved"){
+            tag = "Delivered"
+        }
+        const data = {status:tag}
+        
+        const res = await fetch(`http://localhost:4000/parcelApi/updateParcel/${id}`, {
+          method: "PUT",
+          headers: {
+              "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+              ...data
+          })
+        })
+        const temp = await res.json()
+        if(res.status === 200){
+          setAlertData({message: "Parcel Create Successfully", code: "success"})
+        } else {
+          setAlertData({message: temp.message, code: "danger"})
+        }
+       
+        
+    }
+
+    const statusShow = (status) =>{
+        let tag = "info";
+        if(status === "Booked"){
+            tag = "info"
+        }
+        else if(status === "Sent"){
+            tag = "primary"
+        }
+        else if(status === "Recieved"){
+            tag = "warning"
+        }
+        else if(status === "Delivered"){
+            tag = "success"
+        }
+        return (
+            <td><span className={`badge badge-light-${tag} text-${tag}`}>{status}</span></td>
+        )
+    }
 
     return (
-        <Card>
+        <div>
+            <Card>
             <CardBody>
                 <div className="d-md-flex no-block">
                     <CardTitle>Projects of the Month</CardTitle>
                     <div className="ml-auto">
-                        <select className="custom-select">
-                            <option defaultValue>January</option>
-                            <option value="1">February</option>
-                            <option value="2">March</option>
-                            <option value="3">April</option>
-                        </select>
+                        <form class="form-inline">
+                            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"/>
+                            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                        </form>
+                        
                     </div>
                 </div>
                 <div className="table-responsive mt-2">
                     <table className="table stylish-table mb-0 mt-2 no-wrap v-middle">
                         <thead>
                             <tr>
-                                <th className="font-weight-normal text-muted border-0 border-bottom" colSpan="2">Assigned</th>
-                                <th className="font-weight-normal text-muted border-0 border-bottom">Name</th>
-                                <th className="font-weight-normal text-muted border-0 border-bottom">Priority</th>
-                                <th className="font-weight-normal text-muted border-0 border-bottom">Budget</th>
+                                <th className="font-weight-normal text-muted border-0 border-bottom">Product type</th>
+                                <th className="font-weight-normal text-muted border-0 border-bottom">Send To</th>
+                                <th className="font-weight-normal text-muted border-0 border-bottom">Booked From</th>
+                                <th className="font-weight-normal text-muted border-0 border-bottom">Reservation Day</th>
+                                <th className="font-weight-normal text-muted border-0 border-bottom">Payable Amount</th>
+                                <th className="font-weight-normal text-muted border-0 border-bottom">{props.nav ? null : "Change"} Status</th>
+                                
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td><span className="round rounded-circle text-white d-inline-block text-center bg-info">S</span></td>
-                                <td>
-                                    <h6 className="font-weight-medium mb-0 nowrap">Sunil Joshi</h6><small className="text-muted no-wrap">Web Designer</small></td>
-                                <td>Elite Admin</td>
-                                <td><span className="badge badge-light-success text-success">Low</span></td>
-                                <td>$3.9K</td>
-                            </tr>
-                            <tr className="active">
-                                <td><span className="round text-white d-inline-block text-center"><img src={img2} alt="user" className="rounded-circle" width="50" /></span></td>
-                                <td>
-                                    <h6 className="font-weight-medium mb-0 nowrap">Andrew</h6><small className="text-muted no-wrap">Project Manager</small></td>
-                                <td>Real Homes</td>
-                                <td><span className="badge badge-light-info text-info">Medium</span></td>
-                                <td>$23.9K</td>
-                            </tr>
-                            <tr>
-                                <td><span className="round rounded-circle text-white d-inline-block text-center bg-success">B</span></td>
-                                <td>
-                                    <h6 className="font-weight-medium mb-0 nowrap">Bhavesh patel</h6><small className="text-muted no-wrap">Developer</small></td>
-                                <td>MedicalPro Theme</td>
-                                <td><span className="badge badge-light-danger text-danger">High</span></td>
-                                <td>$12.9K</td>
-                            </tr>
-                            <tr>
-                                <td><span className="round rounded-circle text-white d-inline-block text-center bg-primary">N</span></td>
-                                <td>
-                                    <h6 className="font-weight-medium mb-0 nowrap">Nirav Joshi</h6><small className="text-muted no-wrap">Frontend Eng</small></td>
-                                <td>Elite Admin</td>
-                                <td><span className="badge badge-light-success text-success">Low</span></td>
-                                <td>$10.9K</td>
-                            </tr>
-                            <tr>
-                                <td><span className="round rounded-circle text-white d-inline-block text-center bg-warning">M</span></td>
-                                <td>
-                                    <h6 className="font-weight-medium mb-0 nowrap">Micheal Doe</h6><small className="text-muted no-wrap">Content Writer</small></td>
-                                <td>Helping Hands</td>
-                                <td><span className="badge badge-light-danger text-danger">High</span></td>
-                                <td>$12.9K</td>
-                            </tr>
-                            <tr>
-                                <td><span className="round rounded-circle text-white d-inline-block text-center bg-danger">N</span></td>
-                                <td>
-                                    <h6 className="font-weight-medium mb-0 nowrap">Johnathan</h6><small className="text-muted no-wrap">Graphic</small></td>
-                                <td>Digital Agency</td>
-                                <td><span className="badge badge-light-danger text-danger">High</span></td>
-                                <td>$2.6K</td>
-                            </tr>
+                            { props.loading ? <tr><CircleLoader loading={true} size={75} /></tr> :
+                            parcels.map((parcel, key) =>
+                                <tr key={key}>
+                                    
+                                    <td><h6 className="font-weight-medium mb-0 nowrap">{parcel.ProductType}</h6></td>
+                                    <td>{parcel.SendTo.branch}</td>
+                                    <td>{parcel.BookedFrom.branch}</td>
+                                    <td>{moment(parcel.createdAt).format('DD MMM, YYYY')}</td>
+                                    <td><span 
+                                    className={`badge badge-light-${parcel.PayableAmount===0?"success":"danger"} text-${parcel.PayableAmount===0?"success":"danger"}`}>
+                                        {parcel.PayableAmount}</span></td>
+                                    
+                                    {props.nav ? statusShow(parcel.status) :  props.dataStatus === "Sent" || props.dataStatus === "Delivered" ? null :<td>
+                                        <Button className=" btn btn-sm" color="danger" onClick={() => chageParcelStatus(parcel.status, parcel._id)}>
+                                            Change Status
+                                        </Button>
+                                    </td> }
+                           
+                                </tr>
+                            )}
+                            
+                            
                         </tbody>
                     </table>
                 </div>
             </CardBody>
         </Card>
+            {/* -------------------------------------------------------------------------------- */}
+            {/* Row */}
+            {/* -------------------------------------------------------------------------------- */}
+        </div>
     );
 }
 
-export default Projects;
+export default TooltipComponent;

@@ -67,6 +67,7 @@ const Fulllayout = (props) => {
         };
     }, [width]);
 
+
     /*--------------------------------------------------------------------------------*/
     /* Theme Setting && Layout Options wiil be Change From Here                       */
     /*--------------------------------------------------------------------------------*/
@@ -95,18 +96,26 @@ const Fulllayout = (props) => {
                 <div className="page-content container-fluid">
                     <Notification/>
                     <Switch>
-                        <PrivateRoute exact path="/(|dashboard)" component={Starter}/>
+                        <Route exact path="/(|dashboard)" component={Starter}/>
                         <Route exact path="/loggedin" component={Login}/>
                         {/* <LoginPrivateRoute exact path="/(login|loggedin)" component={Login}/> */}
                         <Route exact path="/updateProfile" component={Updateprofile}/>
-                        <PrivateRoute exact path="/branch-data" component={Alerts}/>
+                        <Route exact path="/branch-data" component={Alerts}/>
+                        <Route exact path="/all-branch" component={Badges}/>
+                        <Route exact path="/create-percel" component={Buttons}/>
+                        <Route exact path="/my-parcel" component={Cards}/>
+                        <Route exact path="/create-employee" component={LayoutComponent}/>
+                        <Route exact path="/pagination" component={PaginationComponent}/>
+                        <Route exact path="/popover" component={PopoverComponent}/>
+                        <Route exact path="/parcel-list" component={TooltipComponent}/>
+                        {/* <PrivateRoute exact path="/branch-data" component={Alerts}/>
                         <PrivateRoute exact path="/all-branch" component={Badges}/>
                         <PrivateRoute exact path="/create-percel" component={Buttons}/>
                         <PrivateRoute exact path="/my-parcel" component={Cards}/>
                         <PrivateRoute exact path="/create-employee" component={LayoutComponent}/>
                         <PrivateRoute exact path="/pagination" component={PaginationComponent}/>
                         <AdminPrivateRoute exact path="/popover" component={PopoverComponent}/>
-                        <SubAdminPrivateRoute exact path="/tooltip" component={TooltipComponent}/>
+                        <SubAdminPrivateRoute exact path="/parcel-list" component={TooltipComponent}/> */}
                         {/* {ThemeRoutes.map((prop, key) => {
                             if (prop.redirect) {
                                 return <Redirect from={prop.path} to={prop.pathTo} key={key} />;

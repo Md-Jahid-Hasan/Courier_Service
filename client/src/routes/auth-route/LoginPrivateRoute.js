@@ -1,11 +1,13 @@
-import React, {useContext} from "react";
+import React, {useContext, useEffect} from "react";
 import {Route, Redirect} from "react-router-dom";
 import {GlobalContext} from '../../context/ProjectContext';
 
-
 const LoginPrivateRoute = ({component: Component, ...rest}) => {
     const {auth} = useContext(GlobalContext)
-    console.log(auth)
+    
+    console.log("login")
+
+
     return (
     <div>
         <Route {...rest} render={

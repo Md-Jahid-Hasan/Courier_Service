@@ -301,8 +301,9 @@ const BookedBranchData = async (req, res) => {
     console.log(d)
     var test = d.split('T')
     console.log(test)
+    var result
     if (status === "Booked") {
-        const result = await Parcel.aggregate([
+         result = await Parcel.aggregate([
             {
                 $addFields: { creationDate: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } } }
             },
@@ -323,6 +324,7 @@ const BookedBranchData = async (req, res) => {
 
             },
 
+
             {
                 $project: {
                     _id: 0,
@@ -333,11 +335,7 @@ const BookedBranchData = async (req, res) => {
 
         ]
         )
-        var saved = result[0].data.map((val, ind) => {
-            return val
-            // return val.populate("BookedFrom SendTo","branch")
-        })
-        console.log(saved)
+
         res.status(200).send(result)
     }
     else if (status === "Recieved") {
@@ -487,8 +485,9 @@ const SentBranchData = async (req, res) => {
     console.log(d)
     var test = d.split('T')
     console.log(test)
+    var result
     if (status === "Booked") {
-        const result = await Parcel.aggregate([
+         result = await Parcel.aggregate([
             {
                 $addFields: { creationDate: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } } }
             },
@@ -521,7 +520,7 @@ const SentBranchData = async (req, res) => {
         res.status(200).send(result)
     }
     else if (status === "Recieved") {
-        const result = await Parcel.aggregate([
+         result = await Parcel.aggregate([
             {
                 $addFields: { creationDate: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } } }
             },
@@ -554,7 +553,7 @@ const SentBranchData = async (req, res) => {
         res.status(200).send(result)
     }
     else if (status === "Sent") {
-        const result = await Parcel.aggregate([
+         result = await Parcel.aggregate([
             {
                 $addFields: { creationDate: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } } }
             },
@@ -588,7 +587,7 @@ const SentBranchData = async (req, res) => {
     }
     else if (status === "Delivered") {
 
-        const result = await Parcel.aggregate([
+         result = await Parcel.aggregate([
             {
                 $addFields: { creationDate: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } } }
             },
@@ -621,7 +620,7 @@ const SentBranchData = async (req, res) => {
         res.status(200).send(result)
     }
     else {
-        const result = await Parcel.aggregate([
+         result = await Parcel.aggregate([
             {
                 $addFields: { creationDate: { $dateToString: { format: "%Y-%m-%d", date: "$expectedDate" } } }
             },
@@ -658,7 +657,6 @@ const SentBranchData = async (req, res) => {
 }
 
 const SelfData = async (req, res) => {
-
     var userId = req.params.userId
     userId = toId(userId)
     const time = req.params.date
@@ -668,6 +666,7 @@ const SelfData = async (req, res) => {
     console.log(d)
     var test = d.split('T')
     console.log(test)
+    var result
     result = await Parcel.aggregate([
         {
             $addFields: { creationDate: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } } }
@@ -705,7 +704,7 @@ const SelfData = async (req, res) => {
 
 const generateProductId = async (req, res) => {
     let r = (Math.random() + 1).toString(36).substring(7);
-    const parcel = await Parcel.findOne({ ProductType: r })
+    const parcel = await Parcel.findOne({ SearchId: r })
     if (parcel) return res.status(400).json({ mesage: "This Id Is already Exists.Click Again to get new Id" })
     return res.status(200).send({
         searchId: r
