@@ -9,6 +9,7 @@ import PaginationComponent from '../views/ui-components/pagination.jsx';
 import PopoverComponent from '../views/ui-components/popover.jsx';
 import TooltipComponent from '../views/ui-components/tooltip.jsx';
 
+
 var ThemeRoutes = [
     {
         path: '/dashboard',
@@ -43,7 +44,7 @@ var ThemeRoutes = [
     },
     {
         path: '/create-employee',
-        name: 'Create Employee',
+        name: 'Create',
         icon: 'mdi mdi-apps',
         component: LayoutComponent
     },
@@ -51,6 +52,7 @@ var ThemeRoutes = [
         path: '/pagination',
         name: 'Parcel Details',
         icon: 'mdi mdi-priority-high',
+        //permission: "employee",
         component: PaginationComponent
     },
     {
@@ -60,11 +62,11 @@ var ThemeRoutes = [
         component: PopoverComponent
     },
     {
-        path: '/tooltip',
-        name: 'Toltips',
+        path: '/parcel-list',
+        name: 'Parcel List',
         icon: 'mdi mdi-image-filter-vintage',
         component: TooltipComponent
     },
-    { path: '/', pathTo: '/dashboard', name: 'Dashboard', redirect: true }
+    // { path: '/', pathTo: '/dashboard', name: 'Dashboard', redirect: true }
 ];
 export default ThemeRoutes;

@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useContext} from 'react';
+import { NavLink } from 'react-router-dom'
 import {
     Nav,
     NavItem,
@@ -15,8 +16,10 @@ import {
 import logodarkicon from '../../../assets/images/logo-icon.png';
 import logodarktext from '../../../assets/images/logo-text.png';
 import profilephoto from '../../../assets/images/users/1.jpg';
+import { GlobalContext } from '../../../context/ProjectContext';
 
 const Header = () => {
+    //const {logOutUser} = useContext(GlobalContext)
 
     /*--------------------------------------------------------------------------------*/
     /*To open SIDEBAR-MENU in MOBILE VIEW                                             */
@@ -66,21 +69,29 @@ const Header = () => {
                             </DropdownToggle>
                             <DropdownMenu right className="user-dd">
                                 <DropdownItem>
-                                    <i className="ti-user mr-1 ml-1" /> My Account
+                                <NavLink className="nav-link" to="/updateProfile">
+                                    {/* <i className="ti-email mr-1 ml-1" /> Login */}
+                                    <span className="ti-email hide-menu "style={{color:"black"}}>My Account</span>
+                                    </NavLink>
                   </DropdownItem>
                                 <DropdownItem>
                                     <i className="ti-wallet mr-1 ml-1" /> My Balance
                   </DropdownItem>
                                 <DropdownItem>
-                                    <i className="ti-email mr-1 ml-1" /> Inbox
+                                    {/* <i className="ti-email mr-1 ml-1" /> Login */}
+                                    <NavLink className="nav-link" to="/loggedin">
+                                    {/* <i className="ti-email mr-1 ml-1" /> Login */}
+                                    <span className="ti-email hide-menu "style={{color:"black"}}>Login</span>
+                                    </NavLink>
+                                 
                   </DropdownItem>
                                 <DropdownItem divider />
                                 <DropdownItem>
                                     <i className="ti-settings mr-1 ml-1" /> Account Settings
                   </DropdownItem>
                                 <DropdownItem divider />
-                                <DropdownItem href="/pages/login">
-                                    <i className="fa fa-power-off mr-1 ml-1" /> Logout
+                                <DropdownItem >
+                                    <i className="fa fa-power-off mr-1 ml-1"/> Logout
                   </DropdownItem>
                                 <DropdownItem divider />
                                 <Button

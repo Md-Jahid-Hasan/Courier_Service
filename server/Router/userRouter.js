@@ -3,6 +3,7 @@ const cookieParser = require('cookie-parser')
 const app =  express();
 const {User,validate} = require('../models/userModel')
 const {Branch} = require('../models/branchModel')
+const auth = require('../middleware/userAuth')
 const bcrypt = require('bcrypt');
 const _ = require('lodash');
 const router = express.Router();
@@ -11,17 +12,23 @@ app.use(cookieParser())
 
 const newUser = async (req,res)=>{
     const { error } = validate(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
+    if (error) return res.status(400).json({message:error.details[0].message});
 
-    let user = await User.findOne({ Email: req.body.Email });
-    if (user) return res.status(400).send('User already registered!');
+    const {Email,Password,Cpassword,Username} = req.body
+    if(!Email||!Password||!Cpassword||!Username) return res.status(400).json({message:"Fill All the Fields"})
 
+    let user = await User.findOne({ Email:Email });
+    if (user) return res.status(400).json({message:'User already registered!'});
     user = new User(req.body);
     // _.pick(req.body, ['Email', 'Password'])
 
     const salt = await bcrypt.genSalt(10);
+    if(Password!==Cpassword) return res.status(400).json({message:"Password Doesn't Match"})
+    user.Password = await bcrypt.hash(Password, salt);
+    user.Cpassword = await bcrypt.hash(Cpassword, salt);
+    // console.log(pass)
+    // if (!pass) return res.status(400).json({message:"Password Doesn't Match"})
     
-    user.Password = await bcrypt.hash(user.Password, salt);
     user.branch = req.params.branch
 
     user = await user.save()
@@ -58,13 +65,14 @@ const getUser = async(req,res)=>{
 
 const updateUser = async (req,res)=>{
     const id = req.params.id
+    console.log(id)
     const updatedData = req.body
     try{
         const user = await User.findByIdAndUpdate(id,updatedData,{new:true})
         if(!user) return res.status(400).json({message:"Id Not Found"})
         return res.status(200).send(user)
     }catch(err){
-        return res.status(400).send("ID Not Found")
+        return res.status(400).json({message:"Something Went Wrong"})
     }
 
 }
@@ -82,26 +90,32 @@ const deleteUser = async (req,res)=>{
 
 }
 
+
 const login = async (req, res) => {
     const { email, password } = req.body
     if (!email || !password) return res.status(400).json({message:"fill the empty field"});
-    const user = await User.findOne({ Email: req.body.email })
+    const user = await User.findOne({ Email: req.body.email }).populate("branch","branch contact" )
     if (!user) return res.status(400).json({message:"This email is not registered"})
     const pass = await bcrypt.compare(req.body.password, user.Password);
     if (!pass) return res.status(400).json({message:"incorrect Password"})
 
     const token = user.generateJWT();
 
-    console.log(token)
     res.cookie("jwtoken", token, {
         expires: new Date(Date.now() + 25892000000),
-        httpOnly: true
+        // httpOnly: true
     });
     const result = await user.save();
+
     res.status(200).send({
         token: token,
+        user: _.pick(result, ['_id','Username' ,'Email','IsAdmin','IsSuperAdmin','branch'])
     })
 
+}
+
+const getAuthenticateInfo = async(req,res)=>{
+    return res.status(200).send(req.rootUser)
 }
 
 router.route('/userApi/user/:branch')
@@ -116,5 +130,8 @@ router.route('/userApi/user/delete/:id')
     .delete(deleteUser)
 router.route('/userApi/login')
     .post(login)
+router.route('/authentication')
+    .get(auth,getAuthenticateInfo)
+
 module.exports = router;
 

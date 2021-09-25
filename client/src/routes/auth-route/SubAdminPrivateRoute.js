@@ -4,15 +4,15 @@ import { GlobalContext } from "../../context/ProjectContext";
 
 
 const SubAdminPrivateRoute = ({component: Component, ...rest}) => {
-    const {auth, user} = useContext(GlobalContext)
+    const {auth, authenticateUser} = useContext(GlobalContext)
     return (
     <div>
         <Route {...rest} render={
             props => {
                 if (auth.isLoading){
                     return <h2>Loading..</h2>
-                }else if(!auth.isAuthenticated || !user.isSubAdmin){
-                    if(!user.isAdmin)
+                }else if(!auth.isAuthenticated || !authenticateUser.IsAdmin){
+                    if(!authenticateUser.IsSuperadmin)
                         return <Redirect to="/"/>
                     else return <Component {...props}/>
                 }else{

@@ -5,12 +5,13 @@ import Sidebar from './layout-components/sidebar/sidebar.jsx';
 import Footer from './layout-components/footer/footer.jsx';
 import ThemeRoutes from '../routes/routing.jsx';
 import Starter from '../views/starter/starter.jsx';
+import Notification from '../views/ui-components/Notification.jsx';
 
 import { 
     AdminPrivateRoute, SubAdminPrivateRoute,
      PrivateRoute, LoginPrivateRoute } from '../routes/auth-route/index.js';
-
-import Login from "../authentication/login"
+import Updateprofile from '../authentication/Updateprofile.js';
+import Login from "../authentication/Login"
 import Alerts from '../views/ui-components/alert.jsx';
 import Badges from '../views/ui-components/badge.jsx';
 import Buttons from '../views/ui-components/button.jsx';
@@ -66,6 +67,7 @@ const Fulllayout = (props) => {
         };
     }, [width]);
 
+
     /*--------------------------------------------------------------------------------*/
     /* Theme Setting && Layout Options wiil be Change From Here                       */
     /*--------------------------------------------------------------------------------*/
@@ -92,17 +94,28 @@ const Fulllayout = (props) => {
             {/*--------------------------------------------------------------------------------*/}
             <div className="page-wrapper d-block">
                 <div className="page-content container-fluid">
+                    <Notification/>
                     <Switch>
                         <PrivateRoute exact path="/(|dashboard)" component={Starter}/>
-                        <LoginPrivateRoute exact path="/login" component={Login}/>
-                        <PrivateRoute exact path="/branch-data" component={Alerts}/>
+                        {/* <Route exact path="/loggedin" component={Login}/> */}
+                        <LoginPrivateRoute exact path="/(login|loggedin)" component={Login}/>
+                        <Route exact path="/updateProfile" component={Updateprofile}/>
+                        <Route exact path="/branch-data" component={Alerts}/>
+                        <Route exact path="/all-branch" component={Badges}/>
+                        <Route exact path="/create-percel" component={Buttons}/>
+                        <Route exact path="/my-parcel" component={Cards}/>
+                        <Route exact path="/create-employee" component={LayoutComponent}/>
+                        <Route exact path="/pagination" component={PaginationComponent}/>
+                        <Route exact path="/popover" component={PopoverComponent}/>
+                        <Route exact path="/parcel-list" component={TooltipComponent}/>
+                        {/* <PrivateRoute exact path="/branch-data" component={Alerts}/>
                         <PrivateRoute exact path="/all-branch" component={Badges}/>
                         <PrivateRoute exact path="/create-percel" component={Buttons}/>
                         <PrivateRoute exact path="/my-parcel" component={Cards}/>
                         <PrivateRoute exact path="/create-employee" component={LayoutComponent}/>
                         <PrivateRoute exact path="/pagination" component={PaginationComponent}/>
                         <AdminPrivateRoute exact path="/popover" component={PopoverComponent}/>
-                        <SubAdminPrivateRoute exact path="/tooltip" component={TooltipComponent}/>
+                        <SubAdminPrivateRoute exact path="/parcel-list" component={TooltipComponent}/>
                         {/* {ThemeRoutes.map((prop, key) => {
                             if (prop.redirect) {
                                 return <Redirect from={prop.path} to={prop.pathTo} key={key} />;

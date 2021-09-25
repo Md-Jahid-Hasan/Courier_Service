@@ -1,219 +1,63 @@
-import React, { useState } from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
-    Alert,
-    UncontrolledAlert,
-    Card,
-    CardBody,
-    CardTitle
+    Row, Button,
+    Col, CardBody
 } from 'reactstrap';
+import { Projects } from '../../components/dashboard';
+import Cards from '../ui-components/cards';
+import { GlobalContext } from '../../context/ProjectContext';
+import DatePicker from "react-datepicker";
 
-const Alerts = () => {
-    // For Dismiss Button with Alert
-    const [visible, setVisible] = useState(true);
 
-    const onDismiss = () => {
-        setVisible(false);
-    }
-
+const Starter = () => {
+    const [sortParam, setSortParam] = useState(new Date())
+    const [parcels, setParcels] = useState([])
+    const {authenticateUser} = useContext(GlobalContext)
+    
+    useEffect(() => {
+        fetch(`http://localhost:4000/parcelApi/branchUser/${authenticateUser._id}/${sortParam}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.length !== 0)
+                    setParcels(data[0].data)
+                else setParcels([])
+            })
+    },[sortParam])
+    
     return (
         <div>
-            {/* --------------------------------------------------------------------------------*/}
-            {/* Start Inner Div*/}
-            {/* --------------------------------------------------------------------------------*/}
-
-            {/* --------------------------------------------------------------------------------*/}
-            {/* Card-1*/}
-            {/* --------------------------------------------------------------------------------*/}
-            <Card>
-                <CardTitle className="bg-light border-bottom p-3 mb-0">
-                    <i className="mdi mdi-comment-processing-outline mr-2"> </i>
-            Alert
-          </CardTitle>
+            <Cards/>
+            <Row>
+                <Col sm={12}>
                 <CardBody className="">
-                    <div className="mt-3">
-                        <Alert color="primary">
-                            This is a primary alert— check it out!
-              </Alert>
-                        <Alert color="secondary">
-                            This is a secondary alert— check it out!
-              </Alert>
-                        <Alert color="success">
-                            This is a success alert— check it out!
-              </Alert>
-                        <Alert color="danger">
-                            This is a danger alert— check it out!
-              </Alert>
-                        <Alert color="warning">
-                            This is a warning alert— check it out!
-              </Alert>
-                        <Alert color="info">This is a info alert— check it out!</Alert>
-                        <Alert color="light">This is a light alert— check it out!</Alert>
-                        <Alert color="dark">This is a dark alert</Alert>
+                    <div className="button-group d-flex justify-content-around">
+                        <Button className="btn" color="info">
+                                Booked
+                        </Button>
+                        <Button className="btn" color="primary">
+                                Send
+                        </Button>
+                        <Button className="btn" color="warning">
+                                Recieved
+                        </Button>
+                        <Button className="btn" color="success">
+                                Delivered
+                         </Button> 
+                         <Button className="btn p-0 m-0" color="light">
+                            <DatePicker selected={sortParam} onChange={(date) => setSortParam(date)} />   
+                         </Button>
                     </div>
                 </CardBody>
-            </Card>
-            {/* --------------------------------------------------------------------------------*/}
-            {/* Card-2*/}
-            {/* --------------------------------------------------------------------------------*/}
-            <Card>
-                <CardTitle className="bg-light border-bottom p-3 mb-0">
-                    <i className="mdi mdi-comment-processing-outline mr-2" />
-            Alert with Links
-          </CardTitle>
-                <CardBody className="">
-                    <div>
-                        <Alert color="primary">
-                            This is a primary alert with
-                <a href="/" className="alert-link">
-                                an example link
-                </a>
-                . Give it a click if you like.
-              </Alert>
-                        <Alert color="secondary">
-                            This is a secondary alert with
-                <a href="/" className="alert-link">
-                                an example link
-                </a>
-                . Give it a click if you like.
-              </Alert>
-                        <Alert color="success">
-                            This is a success alert with
-                <a href="/" className="alert-link">
-                                an example link
-                </a>
-                . Give it a click if you like.
-              </Alert>
-                        <Alert color="danger">
-                            This is a danger alert with
-                <a href="/" className="alert-link">
-                                an example link
-                </a>
-                . Give it a click if you like.
-              </Alert>
-                        <Alert color="warning">
-                            This is a warning alert with
-                <a href="/" className="alert-link">
-                                an example link
-                </a>
-                . Give it a click if you like.
-              </Alert>
-                        <Alert color="info">
-                            This is a info alert with
-                <a href="/" className="alert-link">
-                                an example link
-                </a>
-                . Give it a click if you like.
-              </Alert>
-                        <Alert color="light">
-                            This is a light alert with
-                <a href="/" className="alert-link">
-                                an example link
-                </a>
-                . Give it a click if you like.
-              </Alert>
-                        <Alert color="dark">
-                            This is a dark alert with
-                <a href="/" className="alert-link">
-                                an example link
-                </a>
-                . Give it a click if you like.
-              </Alert>
-                    </div>
-                </CardBody>
-            </Card>
-            {/* --------------------------------------------------------------------------------*/}
-            {/* Card-3*/}
-            {/* --------------------------------------------------------------------------------*/}
-            <Card>
-                <CardTitle className="bg-light border-bottom p-3 mb-0">
-                    <i className="mdi mdi-comment-processing-outline mr-2" />
-            Alert with Additional content
-          </CardTitle>
-                <CardBody className="">
-                    <div>
-                        <Alert color="success">
-                            <h4 className="alert-heading">Well done!</h4>
-                            <p>
-                                Aww yeah, you successfully read this important alert message.
-                                This example text is going to run a bit longer so that you can
-                                see how spacing within an alert works with this kind of
-                                content.
-                </p>
-                            <hr />
-                            <p className="mb-0">
-                                Whenever you need to, be sure to use margin utilities to keep
-                                things nice and tidy.
-                </p>
-                        </Alert>
-                    </div>
-                </CardBody>
-            </Card>
-            {/* --------------------------------------------------------------------------------*/}
-            {/* Card-4*/}
-            {/* --------------------------------------------------------------------------------*/}
-            <Card>
-                <CardTitle className="bg-light border-bottom p-3 mb-0">
-                    <i className="mdi mdi-comment-processing-outline mr-2" />
-            Alert with Dissmissing
-          </CardTitle>
-                <CardBody className="">
-                    <div>
-                        <Alert
-                            color="info"
-                            isOpen={visible}
-                            toggle={onDismiss.bind(null)}
-                        >
-                            I am an alert and I can be dismissed!
-              </Alert>
-                    </div>
-                </CardBody>
-            </Card>
-            {/* --------------------------------------------------------------------------------*/}
-            {/* Card-5*/}
-            {/* --------------------------------------------------------------------------------*/}
-            <Card>
-                <CardTitle className="bg-light border-bottom p-3 mb-0">
-                    <i className="mdi mdi-comment-processing-outline mr-2" />
-            Alert with Uncontrolled [disable] Alerts
-          </CardTitle>
-                <CardBody className="">
-                    <div>
-                        <UncontrolledAlert color="info">
-                            I am an alert and I can be dismissed!
-              </UncontrolledAlert>
-                    </div>
-                </CardBody>
-            </Card>
-            {/* --------------------------------------------------------------------------------*/}
-            {/* Card-6*/}
-            {/* --------------------------------------------------------------------------------*/}
-            <Card>
-                <CardTitle className="bg-light border-bottom p-3 mb-0">
-                    <i className="mdi mdi-comment-processing-outline mr-2" />
-            Alerts without fade
-          </CardTitle>
-                <CardBody className="">
-                    <div>
-                        <Alert
-                            color="primary"
-                            isOpen={visible}
-                            toggle={onDismiss.bind(null)}
-                            fade={false}
-                        >
-                            I am a primary alert and I can be dismissed without animating!
-              </Alert>
-                        <UncontrolledAlert color="warning" fade={false}>
-                            I am an alert and I can be dismissed without animating!
-              </UncontrolledAlert>
-                    </div>
-                </CardBody>
-            </Card>
-
-            {/* --------------------------------------------------------------------------------*/}
-            {/* End Inner Div*/}
-            {/* --------------------------------------------------------------------------------*/}
+                    <Projects parcel={parcels} nav="branch history"/>
+                </Col>
+            </Row>
         </div>
     );
 }
 
-export default Alerts;
+export default Starter;
