@@ -96,9 +96,9 @@ const Fulllayout = (props) => {
                 <div className="page-content container-fluid">
                     <Notification/>
                     <Switch>
-                        <Route exact path="/(|dashboard)" component={Starter}/>
-                        <Route exact path="/loggedin" component={Login}/>
-                        {/* <LoginPrivateRoute exact path="/(login|loggedin)" component={Login}/> */}
+                        <PrivateRoute exact path="/(|dashboard)" component={Starter}/>
+                        {/* <Route exact path="/loggedin" component={Login}/> */}
+                        <LoginPrivateRoute exact path="/(login|loggedin)" component={Login}/>
                         <Route exact path="/updateProfile" component={Updateprofile}/>
                         <Route exact path="/branch-data" component={Alerts}/>
                         <Route exact path="/all-branch" component={Badges}/>
@@ -115,7 +115,7 @@ const Fulllayout = (props) => {
                         <PrivateRoute exact path="/create-employee" component={LayoutComponent}/>
                         <PrivateRoute exact path="/pagination" component={PaginationComponent}/>
                         <AdminPrivateRoute exact path="/popover" component={PopoverComponent}/>
-                        <SubAdminPrivateRoute exact path="/parcel-list" component={TooltipComponent}/> */}
+                        <SubAdminPrivateRoute exact path="/parcel-list" component={TooltipComponent}/>
                         {/* {ThemeRoutes.map((prop, key) => {
                             if (prop.redirect) {
                                 return <Redirect from={prop.path} to={prop.pathTo} key={key} />;

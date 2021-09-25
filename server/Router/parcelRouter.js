@@ -23,9 +23,9 @@ const newParcel = async (req, res) => {
         // })
         // .json({message:"All Field Must Be Filled Up"})
         parcel = new Parcel(req.body);
-        parcel.BookedFrom = req.params.send
-        parcel.SendTo = req.params.to
-        parcel.BookedBy = req.params.employee
+        parcel.BookedFrom =req.params.to
+        parcel.SendTo =req.params.send
+        parcel.BookedBy= req.params.employee
         const save = await parcel.save()
         const result = await Parcel.findById(save._id).populate("BookedFrom SendTo BookedBy", "branch contact Username Email")
         await result.save()
@@ -433,7 +433,7 @@ const BookedBranchData = async (req, res) => {
                     Booked: 1
                 }
             }
-
+        
         ]
         )
         res.status(200).send(result)
