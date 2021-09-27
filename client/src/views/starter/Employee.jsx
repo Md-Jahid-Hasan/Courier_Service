@@ -39,7 +39,7 @@ const Employee = () => {
             console.log(data)
         })
         
-    },[sortParam])
+    },[sortParam, authenticateUser.branch.id])
 
     const setSearchData = () => {
         setSearch(document.getElementsByName('search')[0].value)
@@ -74,27 +74,7 @@ const Employee = () => {
                         </div>  
                     </div>
                 </CardBody>
-                {/* <CardBody>
-                <div className="d-md-flex no-block">
-                    <CardTitle>Projects of the Month</CardTitle>
-                    <div className="ml-auto">
-                        <div class="form-inline">
-                            <input class="form-control mr-sm-2" type="search" placeholder="Search" value={search} onChange={(e) => setSearch(e.target.value)}/>
-                            <button class="btn btn-outline-success my-2 my-sm-0" onClick={() => searchParcel()}>Search</button>
-
-                            <div className="ml-auto">
-                                <select className="custom-select">
-                                    <option value="createdAt">Sort Based on Date</option>
-                                    <option value="status">Sort Based on Status</option>
-                                </select>
-                            </div>
-                        </div>
-                        
-                    </div>
-                </div>
-                
-                    <Projects parcel={parcels} dataStatus={sortParam} loading={loading}/>
-                    </CardBody> */}<Projects parcel={parcels} dataStatus={sortParam} loading={loading} search={search}/>
+                    <Projects parcel={parcels} dataStatus={sortParam} loading={loading} search={search}/>
                 </Col>
             </Row>
         </div>

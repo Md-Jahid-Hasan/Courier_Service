@@ -3,6 +3,7 @@ const cookieParser = require('cookie-parser')
 const app =  express();
 const {User,validate} = require('../models/userModel')
 const {Branch} = require('../models/branchModel')
+const auth = require('../middleware/userAuth')
 const bcrypt = require('bcrypt');
 const _ = require('lodash');
 const router = express.Router();
@@ -113,6 +114,10 @@ const login = async (req, res) => {
 
 }
 
+const getAuthenticateInfo = async(req,res)=>{
+    return res.status(200).send(req.rootUser)
+}
+
 router.route('/userApi/user/:branch')
     .post(newUser)
 router.route('/userApi/user/getUser')
@@ -125,6 +130,8 @@ router.route('/userApi/user/delete/:id')
     .delete(deleteUser)
 router.route('/userApi/login')
     .post(login)
+router.route('/authentication')
+    .get(auth,getAuthenticateInfo)
 
 module.exports = router;
 

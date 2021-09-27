@@ -19,7 +19,10 @@ const Starter = () => {
     
     useEffect(() => {
         setloading(true)
-        fetch(`http://localhost:4000/parcelApi/branchUser/${authenticateUser._id}/${sortParam}`, {
+        let emp_url = `http://localhost:4000/parcelApi/branchUser/${authenticateUser._id}/${sortParam}`
+        let admin_url = `http://localhost:4000/parcelApi/branchUser/${authenticateUser._id}/${sortParam}`
+
+        fetch(emp_url, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json"
@@ -27,26 +30,24 @@ const Starter = () => {
             })
             .then(response => response.json())
             .then(data => {
-                if(data.length !== 0)
-                    setParcels(data[0].data)
+                if(data.length !== 0){
+                    if(status !== ""){
+                        let temp = data[0].data
+                        temp = temp.filter(i => i.status === status)
+                        setParcels(temp)
+                    } else setParcels(data[0].data)
+                }
                 else setParcels([])
                 setloading(false)
-                console.log("1st")
             })
-            .then(data => console.log("testing", data))
-        if(status !== ""){
-            let temp = parcels
-            temp = temp.filter(i => i.status === status)
-            setParcels(temp)
-        }
-    },[sortParam, status])
+
+    },[sortParam, status,authenticateUser._id])
 
 
     const setSearchData = () => {
         setSearch(document.getElementsByName('search')[0].value)
     }
 
-    
     
     return (
         <div>
@@ -63,7 +64,7 @@ const Starter = () => {
                         </div>
                             <div className="form-group col-md-3">
                                 <select className="custom-select"  onChange={(e) => setStatus(e.target.value)}>
-                                    <option value="">Search By Status </option>
+                                    <option value="">All Parcel </option>
                                     <option value="Booked">Booked Parcel</option>
                                     <option value="Sent">Send Parcel</option>
                                     <option value="Recieved">Recieved Parcel</option>

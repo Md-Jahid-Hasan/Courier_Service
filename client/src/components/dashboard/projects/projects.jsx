@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import {
-    Card,
+    Card, Badge,
     CardBody,
     CardTitle,
     Button
@@ -12,6 +13,7 @@ import CircleLoader from "react-spinners/CircleLoader";
 const TooltipComponent = (props) => {
     const [parcels, setParcel] = useState([])
     const {authenticateUser, setAlertData, auth} = useContext(GlobalContext);
+    const history = useHistory()
 
    
     useEffect(() => {
@@ -74,6 +76,13 @@ const TooltipComponent = (props) => {
         setParcel(temp)
         console.log(temp)
     }, [props.search])
+
+    const showProductDetails = (id, uid) => {
+        
+        history.push({
+            pathname: `/product-details/${uid}`,
+        })
+    }
     
     return (
         <div>
@@ -81,20 +90,6 @@ const TooltipComponent = (props) => {
             <CardBody>
                 <div className="d-md-flex no-block">
                     <CardTitle>Projects of the Month</CardTitle>
-                    {/* <div className="ml-auto">
-                        <div class="form-inline">
-                            <input class="form-control mr-sm-2" type="search" placeholder="Search" value={search} onChange={(e) => setSearch(e.target.value)}/>
-                            <button class="btn btn-outline-success my-2 my-sm-0" onClick={() => searchParcel()}>Search</button>
-
-                            <div className="ml-auto">
-                                <select className="custom-select">
-                                    <option value="createdAt">Sort Based on Date</option>
-                                    <option value="status">Sort Based on Status</option>
-                                </select>
-                            </div>
-                        </div>
-                        
-                    </div> */}
                 </div>
                 { props.loading ? <tr colspan="6"><CircleLoader className="m-auto " loading={true} size={75} /></tr> :
                 <div className="table-responsive mt-2">
@@ -116,7 +111,13 @@ const TooltipComponent = (props) => {
                             parcels.map((parcel, key) =>
                                 <tr key={key}>
                                     
-                                    <td><h6 className="font-weight-medium mb-0 nowrap">{parcel.SearchId}</h6></td>
+                                    <td className="t-click" onClick={(e) => {showProductDetails(parcel._id, parcel.SearchId)}}>
+                                     
+                                        <Badge href="" color="primary">
+                                            <h6 className="font-weight-medium mb-0 nowrap">{parcel.SearchId}</h6>
+                                        </Badge>
+                                        
+                                    </td>
                                     <td>{parcel.SendTo.branch}</td>
                                     <td><h6 className="font-weight-medium mb-0 nowrap">{parcel.ProductType}</h6></td>
                                     <td>{moment(parcel.createdAt).format('DD MMM, YYYY')}</td>
@@ -126,7 +127,7 @@ const TooltipComponent = (props) => {
                                     {/* <td><span 
                                     className="badge badge-light-success text-success">
                                         {parcel.PaidAmount}</span></td> */}
-                                    <td className="badge badge-light-success text-success m-">
+                                    <td className="badge badge-light-success text-success m-3">
                                     {parcel.PaidAmount}</td>
                                     {props.nav ? statusShow(parcel.status) :  props.dataStatus === "Sent" || props.dataStatus === "Delivered" ? null :<td>
                                         <Button className=" btn btn-sm" color="danger" onClick={() => chageParcelStatus(parcel.status, parcel._id)}>

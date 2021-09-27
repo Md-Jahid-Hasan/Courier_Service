@@ -5,6 +5,7 @@ import Cookies from 'js-cookie'
 
 export const GlobalContext = createContext()
 
+
 // let initialState = {
 //         Email:"",
 //         IsAdmin:Boolean,
@@ -30,7 +31,7 @@ let initialState = {
         }
     },
     auth: {
-        isAuthenticated: false,
+        isAuthenticated: Cookies.get('jwtoken') ? true : false,
         isLoading: false,
     },
     notification: {
@@ -43,7 +44,7 @@ const ProjectContext = () => {
     const [state, dispatch] = useReducer(reducer, initialState)
 
     const storeLoginData =(data)=>{
-        localStorage.setItem("authUser", JSON.stringify(data))
+        
         return dispatch({
             type:'LOGIN_INFO',
             payload:data
@@ -70,13 +71,26 @@ const ProjectContext = () => {
         })
     }
 
-    const loginRedirect = () => {
-        let data = JSON.parse(localStorage.getItem("authUser"))
-        console.log(data)
-        return dispatch({
-            type:'LOGIN_INFO',
-            payload:data
+    const loginRedirect = async() => {
+        const res = await fetch(`http://localhost:4000/authentication`, {
+            method: "GET",
+            headers: {
+                'Accept': "application/json",
+                "Content-Type": "application/json"
+            },
+            credentials: 'include'
         })
+        const temp = await res.json()
+        if (res.status === 200 && temp) {
+            
+            return dispatch({
+                type:'CHECK_LOGIN',
+                payload:temp
+            })
+            
+
+        }
+        
     }
 
     const logOutUser = () => {
@@ -90,7 +104,8 @@ const ProjectContext = () => {
         if(Cookies.get('jwtoken')){
             loginRedirect()
         }
-    }, [])
+    },[])
+    
 
     return (
         <GlobalContext.Provider value={{...state,storeLoginData,setAlertData, clearAlertData,updateUser, loginRedirect,

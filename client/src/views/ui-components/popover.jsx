@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router';
 import {
     Button,
     Popover,
@@ -13,9 +14,24 @@ import {
 
 const PopoverItem = (props) => {
     const [popoverOpen, setPopoverOpen] = useState(false);
+    const {uid} = useParams()
 
     const toggle = () => setPopoverOpen(!popoverOpen);
 
+
+    console.log(uid)
+    useEffect(() => {
+        fetch(`http://localhost:4000/parcelApi/see/${uid}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data)
+        })
+    }, [])
     return (
         <span>
             <Button className="mr-1" color="secondary" id={`Popover-${props.id}`} onClick={toggle.bind(null)}>
