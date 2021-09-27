@@ -83,7 +83,7 @@ const Updateprofile = () => {
     }, [])
 
     return (
-        loading ? (<div className="show-pic"><BeatLoader color={"#36D7B7"} loading={loading} size={100} /></div>)
+        loading ? (<div className="show-pic"><BeatLoader color={"#36D7B7"} loading={loading} size={50} /></div>)
         :
         (
         <div class="main">

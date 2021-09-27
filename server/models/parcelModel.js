@@ -50,8 +50,6 @@ const parcelSchema = new Schema({
 // }
 
 
-
-
 const Parcel = model('parcel', parcelSchema);
 module.exports.Parcel = Parcel;
 // module.exports.validate = validateUser;
