@@ -3,7 +3,6 @@ const {Branch} = require('../models/branchModel')
 const _ = require('lodash');
 const router = express.Router();
 
-
 const newBranch =async (req,res)=>{
     let branch = await Branch.findOne({branch: req.body.branch });
     if (branch) return res.status(400).json({message:'Branch already exists!'});
@@ -105,6 +104,7 @@ const TestData = async (req,res)=>{
     
     res.status(200).send(results)
 }
+
 router.route('/branchApi/createBranch')
     .post(newBranch)
 router.route('/branchApi/getBranch')

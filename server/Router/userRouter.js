@@ -16,8 +16,8 @@ const newUser = async (req, res) => {
     const { error } = validate(req.body);
     if (error) return res.status(400).json({ message: error.details[0].message });
 
-    const { Email, Password, Cpassword, Username } = req.body
-    if (!Email || !Password || !Cpassword || !Username) return res.status(400).json({ message: "Fill All the Fields" })
+    const { Email, Password, Cpassword, Username, contact } = req.body
+    if (!Email || !Password || !Cpassword || !Username||!contact) return res.status(400).json({ message: "Fill All the Fields" })
 
     let user = await User.findOne({ Email: Email });
     if (user) return res.status(400).json({ message: 'User already registered!' });

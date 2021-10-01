@@ -27,6 +27,11 @@ const userSchema = new Schema({
         default:false
     },
     branch:{type:Schema.Types.ObjectId,ref:'branch'},
+    contact: {
+        type: Number,
+        minlength: 11,
+        required: true
+    },
     tokens: [{
         token: {
             type: String,
