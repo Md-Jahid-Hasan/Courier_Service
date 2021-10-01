@@ -1,5 +1,6 @@
 const express = require('express');
 const cookieParser = require('cookie-parser')
+const mongoose = require('mongoose');
 const app =  express();
 const {User,validate} = require('../models/userModel')
 const {Branch} = require('../models/branchModel')
@@ -7,6 +8,7 @@ const auth = require('../middleware/userAuth')
 const bcrypt = require('bcrypt');
 const _ = require('lodash');
 const router = express.Router();
+const toId = mongoose.Types.ObjectId
 
 app.use(cookieParser())
 
@@ -118,12 +120,23 @@ const getAuthenticateInfo = async(req,res)=>{
     return res.status(200).send(req.rootUser)
 }
 
+const getUserBranch = async(req,res)=>{
+    const branchId = toId(req.params.branchId)
+    console.log(branchId)
+    const user = await User.find({branch:branchId}).populate("branch","branch contact" )
+    if(!user) return res.status(400).json({message:"No User Found"})
+    // const result = await User.find()
+    return res.status(200).send(user)
+}
+
 router.route('/userApi/user/:branch')
     .post(newUser)
 router.route('/userApi/user/getUser')
     .get(allUser)
 router.route('/userApi/user/:id')
     .get(getUser)
+router.route('/userApi/user/getUserbranch/:branchId')
+    .get(getUserBranch)
 router.route('/userApi/user/update/:id')
     .put(updateUser)
 router.route('/userApi/user/delete/:id')

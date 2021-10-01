@@ -21,10 +21,10 @@ const Employee = () => {
     useEffect(() => {
         setloading(true)
         let branchStatus = "bookedFrom"
-        if(sortParam === "Recieved" || sortParam === "Delivered" || sortParam === "Expected Date")
+        if(sortParam === "Recieved" || sortParam === "Delivered" || sortParam === "Expected")
             branchStatus = "sendTo"
 
-        fetch(`http://localhost:4000/parcelApi/branchUser/${branchStatus}/${authenticateUser.branch.id}/${sortParam}`, {
+        fetch(`http://localhost:4000/parcelApi/branchUser/${branchStatus}/${authenticateUser.branch.id}/${sortParam}/${dateParam}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"
@@ -32,15 +32,16 @@ const Employee = () => {
         })
         .then(response => response.json())
         .then(data => {
-            if(data.length !== 0)
-                setParcels(data[0].data)
+            console.log("adad",data)
+            if(data.message) setParcels([])
+            else if(data.length !== 0)
+                setParcels(data)
             else setParcels([])
             setloading(false)
-            console.log(data)
         })
-        
     },[sortParam, authenticateUser.branch.id])
 
+  
     const setSearchData = () => {
         setSearch(document.getElementsByName('search')[0].value)
     }

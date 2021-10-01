@@ -1,19 +1,18 @@
 import React, {useState, useEffect, useContext} from 'react';
 import { Container, Card, CardBody, CardTitle } from 'reactstrap';
 import {GlobalContext} from "../../context/ProjectContext"
+import { useParams, useHistory } from 'react-router';
 
 
-
-const LayoutComponent = () => {
-    const [userData, setUserData] = useState({Email: "", Username:"", Password:"", Cpassword:""})
+const UpdateUser = () => {
+    const [userData, setUserData] = useState({Email: "", Username:"", Password:"", Cpassword:"",
+         branchName:"", branchID: ""})
     const [branch, setBranch] = useState([])
     const {authenticateUser, setAlertData} = useContext(GlobalContext);
-    const [createAlert, setAlert] = useState({msg:"", code:"", visibility:false})
-
-    useEffect(() => {
-        if(createAlert.visibility && !(createAlert.code === "success"))
-            setAlert({...createAlert, visibility:false, code: "info"})
-    }, [userData])
+    const [defaultBranch, setDefaultBranch] = useState({})
+    
+    const {uid} = useParams()
+    const history = useHistory()
     
 
     useEffect(() => {
@@ -26,13 +25,24 @@ const LayoutComponent = () => {
             }) 
 
             const temp = await res.json()
-            console.log(temp)
             setBranch(temp)
         }
         getBranchName()
+
+        fetch(`http://localhost:4000/userApi/user/${uid}`, {
+            method: "GET",
+            headers:{
+                "Content-Type": "application/json"
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            setUserData({Email: data.Email, Username: data.Username, branchName: data.branch.branch, branchID: data.branch._id})   
+            setDefaultBranch(data.branch)
+        })
     }, [])
-
-
+    
+    console.log(defaultBranch)
     const password_show_hide = () => {
         var x = document.getElementById("password");
         var show_eye = document.getElementById("show_eye");
@@ -58,8 +68,10 @@ const LayoutComponent = () => {
             userData['IsAdmin'] = true
         }
         const branch = document.getElementById('sel1').value
-        const res = await fetch(`http://localhost:4000/userApi/user/${branch}`, {
-                method: "POST",
+        userData["branchID"] = branch
+        
+        const res = await fetch(`http://localhost:4000/userApi/user/update/${uid}`, {
+                method: "PUT",
                 headers: {
                     "Content-Type": "application/json"
                 },
@@ -70,16 +82,16 @@ const LayoutComponent = () => {
         
         const temp = await res.json()
         if(res.status === 200){
-            setAlert({...createAlert, msg:"User Create Successfully", code:"success", visibility:true})
-            setAlertData({message: "User Create Successfilly", code: "success"})
+
+            setAlertData({message: "User update Successfilly", code: "success"})
             setUserData({Email: "", Username:"", Password:"", Cpassword:""})
+            history.push("/employees")
         } else{
-            setAlert({...createAlert, msg:temp.message, code:"danger", visibility:true})
+            
             setAlertData({message: temp.message, code: "danger"})
         }
 
-        console.log(userData)
-        console.log(temp)
+        
     }
 
     return (
@@ -87,7 +99,7 @@ const LayoutComponent = () => {
             <Card>
                 <CardTitle className="bg-light border-bottom p-3 mb-0">
                     <i className="mdi mdi-apps mr-2"> </i>
-                    Create A User
+                    Update User
                 </CardTitle>
 
                 <CardBody className="">
@@ -100,7 +112,7 @@ const LayoutComponent = () => {
                                 <form action="" method="post" id="login" autocomplete="off" 
                                     className="bg-light border p-3" onSubmit={(e) =>handleUserData(e)}>
                                 <div className="form-row">
-                                    <h4 className="title my-3">Register For an Account</h4>
+                                    <h4 className="title my-3">Update User</h4>
                                     <div className="col-12">
                                     <div className="input-group mb-3">
                                         <div className="input-group-prepend">
@@ -130,9 +142,9 @@ const LayoutComponent = () => {
                                         <span className="input-group-text" id="basic-addon1"><i className="fas fa-code-branch"></i></span>
                                         </div>
 
-                                        <select className="form-control form-control-sm" id="sel1" defaultValue={'DEFAULT'}>
-                                            <option value="DEFAULT" disabled hidden>
-                                                Enter Your Branch
+                                        <select className="form-control form-control-sm" id="sel1" defaultValue={userData.branchID}>
+                                            <option value={userData.branchID} disabled>
+                                               {userData.branchName}
                                             </option>
                                             {branch.map((x, key) => 
                                                 <option key={key} value={x._id}>{x.branch}</option>
@@ -149,7 +161,7 @@ const LayoutComponent = () => {
                                         <span className="input-group-text" id="basic-addon1"><i className="fas fa-lock"></i></span>
                                         </div>
                                         <input name="password" type="password" value={userData.Password} className="input form-control" id="password" 
-                                        placeholder="password" required aria-label="password" aria-describedby="basic-addon1" 
+                                        placeholder="password" aria-label="password" aria-describedby="basic-addon1" 
                                         onChange={(e) => setUserData({...userData, Password: e.target.value})}/>
                                         <div className="input-group-append">
                                         <span className="input-group-text" onClick={() => password_show_hide()}>
@@ -165,7 +177,7 @@ const LayoutComponent = () => {
                                         <span className="input-group-text" id="basic-addon1"><i className="fas fa-lock"></i></span>
                                         </div>
                                         <input name="confirm password" type="password" value={userData.Cpassword} className="input form-control" id="confirm password" 
-                                        placeholder="confirm password" required aria-label="password" aria-describedby="basic-addon1" 
+                                        placeholder="confirm password" aria-label="password" aria-describedby="basic-addon1" 
                                         onChange={(e) => setUserData({...userData, Cpassword: e.target.value})}/>
                                         <div className="input-group-append">
                                         <span className="input-group-text" onClick={() => password_show_hide()}>
@@ -177,7 +189,7 @@ const LayoutComponent = () => {
                                     </div>
                                 
                                     <div className="col-12" id="loginbtnDiv">
-                                    <button className="btn btn" type="submit" id="signinbtn" name="signin">Login</button>
+                                    <button className="btn btn" type="submit" id="signinbtn" name="signin">Update</button>
                                     </div>
                                 </div>
                                 </form>
@@ -198,4 +210,4 @@ const LayoutComponent = () => {
     );
 }
 
-export default LayoutComponent;
+export default UpdateUser;

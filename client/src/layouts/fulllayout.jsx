@@ -19,9 +19,13 @@ import Badges from '../views/ui-components/badge.jsx';
 import Buttons from '../views/ui-components/button.jsx';
 import Cards from '../views/ui-components/cards.jsx';
 import LayoutComponent from '../views/ui-components/layout.jsx';
+import UpdateUser from '../views/ui-components/user_form.jsx';
 import PaginationComponent from '../views/ui-components/pagination.jsx';
-import PopoverComponent from '../views/ui-components/popover.jsx';
+import PopoverComponent from '../views/ui-components/product_details.jsx';
 import TooltipComponent from '../views/ui-components/tooltip.jsx';
+import BranchList from '../views/ui-components/branch_list.jsx';
+import UpdateBranch from '../views/ui-components/update-branch.jsx';
+import ParcelTrack from "../views/ui-components/parcel_track";
 
 
 
@@ -109,11 +113,13 @@ const Fulllayout = (props) => {
                         <PrivateRoute exact path="/branch-data" component={Alerts}/>
                         <PrivateRoute exact path="/create-branch" component={Badges}/>
                         <PrivateRoute exact path="/employees" component={Buttons}/>
-                        <PrivateRoute exact path="/branch" component={Cards}/>
+                        <PrivateRoute exact path="/branch" component={BranchList}/>
                         <PrivateRoute exact path="/create-employee" component={LayoutComponent}/>
+                        <PrivateRoute exact path="/update-employee/:uid" component={UpdateUser}/>
                         <PrivateRoute exact path="/create-percel" component={PaginationComponent}/>
                         <PrivateRoute exact path="/product-details/:uid" component={PopoverComponent}/>
                         <PrivateRoute exact path="/parcel-list" component={TooltipComponent}/>
+                        <Route exact path="/track-parcel/:pid" component={ParcelTrack}/>
                        
                     </Switch>
                 </div>

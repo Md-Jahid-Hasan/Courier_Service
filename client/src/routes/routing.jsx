@@ -6,8 +6,9 @@ import Buttons from '../views/ui-components/button.jsx';
 import Cards from '../views/ui-components/cards.jsx';
 import LayoutComponent from '../views/ui-components/layout.jsx';
 import PaginationComponent from '../views/ui-components/pagination.jsx';
-import PopoverComponent from '../views/ui-components/popover.jsx';
+import ProductDetails from '../views/ui-components/product_details.jsx';
 import TooltipComponent from '../views/ui-components/tooltip.jsx';
+import BranchList from '../views/ui-components/branch_list.jsx';
 
 
 var ThemeRoutes = [
@@ -27,13 +28,6 @@ var ThemeRoutes = [
         component: Alerts
     },
     {
-        path: '/create-branch',
-        name: 'Create Branch',
-        icon: 'mdi mdi-arrange-send-backward',
-        permission: "1",
-        component: Badges
-    },
-    {
         path: '/employees',
         name: 'Branch Employee',
         icon: 'mdi mdi-toggle-switch',
@@ -45,7 +39,7 @@ var ThemeRoutes = [
         name: 'All Branch',
         icon: 'mdi mdi-credit-card-multiple',
         permission: "1",
-        component: Cards
+        component: BranchList
     },
     {
         path: '/create-employee',
@@ -66,14 +60,9 @@ var ThemeRoutes = [
         name: 'Parcel Details',
         icon: 'mdi mdi-pencil-circle',
         permission: "4",
-        component: PopoverComponent
+        component: ProductDetails
     },
-    {
-        path: '/parcel-list',
-        name: 'All Parcel',
-        icon: 'mdi mdi-image-filter-vintage',
-        component: TooltipComponent
-    },
+
     // { path: '/', pathTo: '/dashboard', name: 'Dashboard', redirect: true }
 ];
 export default ThemeRoutes;

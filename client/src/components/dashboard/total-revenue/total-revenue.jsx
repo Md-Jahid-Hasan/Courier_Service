@@ -14,7 +14,7 @@ const TotalRevenue = (props) => {
     const [paid, setPaid] = useState([])
     const [payable, setPayable] = useState([])
     
-
+    console.log(props.data)
     const mnth = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
     const day = []
     const column = props.period === "Monthly" ? 31 : 12; 
@@ -38,8 +38,6 @@ const TotalRevenue = (props) => {
         setPaid(p)
         setPayable(pa)
     }, [props.data])
-
-   console.log(paid, payable, total)
 
     const options = {
         chart: {

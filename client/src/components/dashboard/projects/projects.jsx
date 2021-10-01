@@ -12,6 +12,7 @@ import CircleLoader from "react-spinners/CircleLoader";
 
 const TooltipComponent = (props) => {
     const [parcels, setParcel] = useState([])
+    const [searchResult, setSearchResult] = useState()
     const {authenticateUser, setAlertData, auth} = useContext(GlobalContext);
     const history = useHistory()
 
@@ -44,12 +45,13 @@ const TooltipComponent = (props) => {
         })
         const temp = await res.json()
         if(res.status === 200){
-          setAlertData({message: "Parcel Create Successfully", code: "success"})
+            setAlertData({message: "Done", code: "success"})
+            let temp = parcels
+            temp = temp.filter(i => i._id !== id)
+            setParcel(temp)
         } else {
           setAlertData({message: temp.message, code: "danger"})
-        }
-       
-        
+        }   
     }
 
     const statusShow = (status) =>{
@@ -70,18 +72,51 @@ const TooltipComponent = (props) => {
             <td><span className={`badge badge-light-${tag} text-${tag}`}>{status}</span></td>
         )
     }
+
     useEffect(() => {
-        let temp = parcels
-        temp = temp.filter(i => i.SearchId === props.search)
-        setParcel(temp)
-        console.log(temp)
+        if(props.search){
+            let temp = parcels
+            temp = temp.filter(i => i.SearchId === props.search)
+            setSearchResult(temp)
+        }
     }, [props.search])
 
-    const showProductDetails = (id, uid) => {
-        
+    const showProductDetails = (id, uid) => { 
         history.push({
             pathname: `/product-details/${uid}`,
         })
+    }
+
+    const searchResultpage = () => {
+        return (
+            <>
+            {searchResult.map((res, key) => 
+            <tr key={key}>                            
+                <td className="t-click" onClick={(e) => {showProductDetails(res._id, res.SearchId)}}>
+                
+                    <Badge href="" color="primary">
+                        <h6 className="font-weight-medium mb-0 nowrap">{res.SearchId}</h6>
+                    </Badge>
+                    
+                </td>
+                <td>{res.SendTo.branch}</td>
+                <td><h6 className="font-weight-medium mb-0 nowrap">{res.ProductType}</h6></td>
+                <td>{moment(res.createdAt).format('DD MMM, YYYY')}</td>
+                <td><span 
+                className={`badge badge-light-${res.PayableAmount===0?"success":"danger"} text-${res.PayableAmount===0?"success":"danger"}`}>
+                    {res.PayableAmount}</span></td>
+                
+                <td className="badge badge-light-success text-success m-3">
+                {res.PaidAmount}</td>
+                {props.nav ? statusShow(res.status) :  props.dataStatus === "Sent" || props.dataStatus === "Delivered" ? null :<td>
+                    <Button className=" btn btn-sm" color="danger" onClick={() => chageParcelStatus(res.status, res._id)}>
+                        Change Status
+                    </Button>
+                </td> }
+                           
+            </tr>)}
+            </>
+        )
     }
     
     return (
@@ -107,7 +142,7 @@ const TooltipComponent = (props) => {
                             </tr>
                         </thead>
                         <tbody>
-                            { 
+                            { searchResult ? searchResultpage() :
                             parcels.map((parcel, key) =>
                                 <tr key={key}>
                                     
@@ -124,9 +159,7 @@ const TooltipComponent = (props) => {
                                     <td><span 
                                     className={`badge badge-light-${parcel.PayableAmount===0?"success":"danger"} text-${parcel.PayableAmount===0?"success":"danger"}`}>
                                         {parcel.PayableAmount}</span></td>
-                                    {/* <td><span 
-                                    className="badge badge-light-success text-success">
-                                        {parcel.PaidAmount}</span></td> */}
+                                    
                                     <td className="badge badge-light-success text-success m-3">
                                     {parcel.PaidAmount}</td>
                                     {props.nav ? statusShow(parcel.status) :  props.dataStatus === "Sent" || props.dataStatus === "Delivered" ? null :<td>

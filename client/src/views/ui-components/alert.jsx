@@ -20,9 +20,10 @@ const Starter = () => {
     useEffect(() => {
         setloading(true)
         let emp_url = `http://localhost:4000/parcelApi/branchUser/${authenticateUser._id}/${sortParam}`
-        let admin_url = `http://localhost:4000/parcelApi/branchUser/${authenticateUser._id}/${sortParam}`
-
-        fetch(emp_url, {
+        let admin_url = `http://localhost:4000/parcelApi/subAdmin/sendTo/history/${sortParam}/${authenticateUser.branch.id}`
+        let admin_url1 = `http://localhost:4000/parcelApi/subAdmin/bookedFrom/history/${sortParam}/${authenticateUser.branch.id}`
+       
+        fetch(authenticateUser.IsAdmin ? admin_url1 : emp_url, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json"
@@ -30,19 +31,47 @@ const Starter = () => {
             })
             .then(response => response.json())
             .then(data => {
-                if(data.length !== 0){
+                
+                if(data.message) setParcels([])
+                else if(data.length !== 0){
                     if(status !== ""){
-                        let temp = data[0].data
+                        let temp = data
                         temp = temp.filter(i => i.status === status)
                         setParcels(temp)
-                    } else setParcels(data[0].data)
+                    } else setParcels(data)
                 }
                 else setParcels([])
                 setloading(false)
             })
+            .then( () =>
+                {authenticateUser.IsAdmin && 
+                
+                 fetch(admin_url, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log("new",data)
+                
+                    if(data.length !== 0 && !data.message){
+                        if(status !== ""){
+                            let temp = data
+                            temp = temp.filter(i => i.status === status)
+                            setParcels(parcels => [...parcels,...temp])
+                        
+                        } else setParcels(parcels => [...parcels,...data])
+                    }
+                   
+                    setloading(false)
+                    console.log("ne",parcels)
 
+                })}
+            )
+            
     },[sortParam, status,authenticateUser._id])
-
 
     const setSearchData = () => {
         setSearch(document.getElementsByName('search')[0].value)

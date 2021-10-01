@@ -3,6 +3,7 @@ import { GlobalContext } from '../context/ProjectContext'
 import BeatLoader from 'react-spinners/BeatLoader'
 import { useHistory } from 'react-router-dom';
 import test from '../assets/images/test.jpg'
+
 const Updateprofile = () => {
     const history = useHistory()
     const { Email, branch, Username, _id, updateUser } = useContext(GlobalContext)
@@ -51,6 +52,7 @@ const Updateprofile = () => {
         }
 
     }
+    
     const getInfo = async () => {
 
         const res = await fetch(`http://localhost:4000/authentication`, {
@@ -82,7 +84,7 @@ const Updateprofile = () => {
     }, [])
 
     return (
-        loading ? (<div className="show-pic"><BeatLoader color={"#36D7B7"} loading={loading} size={100} /></div>)
+        loading ? (<div className="show-pic"><BeatLoader color={"#36D7B7"} loading={loading} size={50} /></div>)
         :
         (
         <div class="main">
@@ -153,9 +155,9 @@ const Updateprofile = () => {
 
                             </div>
                         </div>
-                        <div class="col-md-2">
+                        {/* <div class="col-md-2">
                             <input type="submit" class="profile-edit-btn" name="btnAddMore" value="Edit Profile" onClick={updateInfo} />
-                        </div>
+                        </div> */}
                     </div>
                 </form>
             </div>

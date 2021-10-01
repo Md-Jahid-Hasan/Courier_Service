@@ -46,18 +46,23 @@ const PaginationComponent = () => {
         setParcelData({...parcelData, PayableAmount:amount})
     },[parcelData.TotalCost, parcelData.PaidAmount])
 
+    useEffect(() => {
+      setParcelData({...parcelData, BookedFrom:authenticateUser.branch.id})
+    }, [authenticateUser.branch.id])
+   
     const changeParcelData = (event) => {
         setParcelData({...parcelData, [event.target.name]:event.target.value})
     }
     
     const handleCreateParcel = async(event) => {
         event.preventDefault()
-        console.log(parcelData)
+   
   
         for (const [key, value] of Object.entries(parcelData)) {
           if(key === "PaidAmount" || key === "PayableAmount")
             continue
           if(value === "" || value === 0){
+            setAlertData({message: `Field ${key} is empty`, code: "danger"})
             return
           }
         }
@@ -72,6 +77,7 @@ const PaginationComponent = () => {
           })
         })
         const temp = await res.json()
+        console.log(res)
         if(res.status === 200){
           setAlertData({message: "Parcel Create Successfully", code: "success"})
         } else {
@@ -111,16 +117,15 @@ const PaginationComponent = () => {
             <div class="form-group row updatefrom">
               <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">BookedFrom:</label>
               <div class="col-sm-10">
-                   <select className="form-control form-control-sm" id="sel1" name="BookedFrom" defaultValue={authenticateUser.branch.id}
-                   onChange={(e) => changeParcelData(e)}>
+              {authenticateUser.branch.id && <select className="form-control form-control-sm" id="sel1" name="BookedFrom" defaultValue={authenticateUser.branch.id}>
                     <option value={authenticateUser.branch.id} disabled hidden>
-                    {authenticateUser.branch.branch}
+                      {authenticateUser.branch.branch}
                     </option>
-                    {branch.map((x, key) => 
+                    {/* {branch.map((x, key) => 
                         <option key={key} value={x._id}>{x.branch}</option>
-                    )}
+                    )} */}
                     
-                    </select>
+                    </select>}
                  </div>
             </div>
             <div class="form-group row updatefrom">
