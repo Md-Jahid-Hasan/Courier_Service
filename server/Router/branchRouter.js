@@ -67,8 +67,44 @@ const deleteBranch = async(req,res)=>{
         return res.status(400).send("Branch Not Found")
     }
 }
+//testApi/branchTest?page=2&limit=5
+const TestData = async (req,res)=>{
+    const page = parseInt(req.query.page)
+    const limit = parseInt(req.query.limit)
 
+    const startIndex = (page-1)*limit
+    const endIndex = page*limit
+    const branch = await Branch.find()
+    const results = {}
+    results.results = branch.slice(startIndex,endIndex)
+    if(endIndex<branch.length){
+        results.next={
+            page:page+1,
+            limit:limit
+        }
+    }
+    else{
+        results.next={
+            page:page,
+            limit:limit
+        }
+    }
 
+    if(startIndex>0){
+        results.prev={
+            page:page-1,
+            limit:limit
+        }
+    }
+    else{
+        results.prev={
+            page:0,
+            limit:limit
+        }
+    }
+    
+    res.status(200).send(results)
+}
 router.route('/branchApi/createBranch')
     .post(newBranch)
 router.route('/branchApi/getBranch')
@@ -79,4 +115,6 @@ router.route('/branchApi/updateBranch/:id')
     .put(updateBranch)
 router.route('/branchApi/deleteBranch/:id')
     .delete(deleteBranch)
+ router.route('/testApi/branchTest')
+    .get(TestData)
 module.exports = router;
