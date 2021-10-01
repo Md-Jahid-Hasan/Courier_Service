@@ -7,6 +7,7 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const { Branch } = require('../models/branchModel');
 const { result } = require('lodash');
+const { User } = require('../models/userModel');
 const toId = mongoose.Types.ObjectId
 
 const newParcel = async (req, res) => {
@@ -1678,6 +1679,22 @@ const Test = async (req, res) => {
 }
 
 // ----------------
+const sendText = async(req,res)=>{
+    const branch = await Branch.findOne({_id:toId(req.body.branchId)})
+    const parcel = await Parcel.findOne({SendTo:toId(req.body.sendToBranch)}).populate("SendTo BookedBy","branch contact Username Email")
+    const user = await User.findOne({_id:toId(req.body.bookedbyId)})
+
+    if(req.body.status === "Booked"){
+        
+        console.log(`Dear ${req.body.SenderName}, Your Product is Booked at ${branch.branch} Branch. The Proqduct Will Be Sent To ${parcel.SendTo.branch} Branch. Your Product is Booked By ${user.Username} ` )
+    }
+    else if(req.body.status === "Recieved"){
+        console.log(`Dear ${req.body.RecieverName}, Your Product is Booked at ${branch.branch} Branch. The Proqduct is  now rtecieved At ${parcel.SendTo.branch} Branch. Your Product is Booked By ${user.Username} `)
+    }
+    else{
+        console.log(`Dear ${req.body.SenderName}, Your Product is delivered to ${req.body.RecieverName}`)
+    }
+}
 
 router.route('/parcelApi/parcel/:send/:to/:employee')
     .post(newParcel)
@@ -1725,6 +1742,8 @@ router.route('/parcelApi/admin/dashboard/sendTo/totalShowbranch/cardBranch/:bran
     .get(AdminDashCardBranchSend)
 router.route('/testApi/testData/:calender/:date/:branch')
     .get(Test)
+router.route("/textApi/userMessage")
+    .post(sendText)
 
 
 module.exports = router;
