@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import Header from './layout-components/header/header.jsx';
 import Sidebar from './layout-components/sidebar/sidebar.jsx';
@@ -6,6 +6,8 @@ import Footer from './layout-components/footer/footer.jsx';
 import ThemeRoutes from '../routes/routing.jsx';
 import Starter from '../views/starter/starter.jsx';
 import Notification from '../views/ui-components/Notification.jsx';
+import Cookies from 'js-cookie'
+import { GlobalContext } from '../context/ProjectContext.js';
 
 import { 
     AdminPrivateRoute, SubAdminPrivateRoute,
@@ -17,9 +19,14 @@ import Badges from '../views/ui-components/badge.jsx';
 import Buttons from '../views/ui-components/button.jsx';
 import Cards from '../views/ui-components/cards.jsx';
 import LayoutComponent from '../views/ui-components/layout.jsx';
+import UpdateUser from '../views/ui-components/user_form.jsx';
 import PaginationComponent from '../views/ui-components/pagination.jsx';
-import PopoverComponent from '../views/ui-components/popover.jsx';
+import PopoverComponent from '../views/ui-components/product_details.jsx';
 import TooltipComponent from '../views/ui-components/tooltip.jsx';
+import BranchList from '../views/ui-components/branch_list.jsx';
+import UpdateBranch from '../views/ui-components/update-branch.jsx';
+import ParcelTrack from "../views/ui-components/parcel_track";
+
 
 
 const Fulllayout = (props) => {
@@ -27,6 +34,7 @@ const Fulllayout = (props) => {
     /*Change the layout settings [HEADER,SIDEBAR && DARK LAYOUT] from here            */
     /*--------------------------------------------------------------------------------*/
     const [width, setWidth] = useState(window.innerWidth);
+    const {auth} = useContext(GlobalContext)
 
     props.history.listen((location, action) => {
         if (
@@ -67,6 +75,8 @@ const Fulllayout = (props) => {
         };
     }, [width]);
 
+    
+
 
     /*--------------------------------------------------------------------------------*/
     /* Theme Setting && Layout Options wiil be Change From Here                       */
@@ -88,7 +98,7 @@ const Fulllayout = (props) => {
             {/*--------------------------------------------------------------------------------*/}
             {/* Sidebar                                                                        */}
             {/*--------------------------------------------------------------------------------*/}
-            <Sidebar {...props} routes={ThemeRoutes} />
+           { auth.isAuthenticated && <Sidebar {...props} routes={ThemeRoutes} />}
             {/*--------------------------------------------------------------------------------*/}
             {/* Page Main-Content                                                              */}
             {/*--------------------------------------------------------------------------------*/}
@@ -99,33 +109,18 @@ const Fulllayout = (props) => {
                         <PrivateRoute exact path="/(|dashboard)" component={Starter}/>
                         {/* <Route exact path="/loggedin" component={Login}/> */}
                         <LoginPrivateRoute exact path="/(login|loggedin)" component={Login}/>
-                        <Route exact path="/updateProfile" component={Updateprofile}/>
-                        <Route exact path="/branch-data" component={Alerts}/>
-                        <Route exact path="/all-branch" component={Badges}/>
-                        <Route exact path="/create-percel" component={Buttons}/>
-                        <Route exact path="/my-parcel" component={Cards}/>
-                        <Route exact path="/create-employee" component={LayoutComponent}/>
-                        <Route exact path="/pagination" component={PaginationComponent}/>
-                        <Route exact path="/popover" component={PopoverComponent}/>
-                        <Route exact path="/parcel-list" component={TooltipComponent}/>
-                        {/* <PrivateRoute exact path="/branch-data" component={Alerts}/>
-                        <PrivateRoute exact path="/all-branch" component={Badges}/>
-                        <PrivateRoute exact path="/create-percel" component={Buttons}/>
-                        <PrivateRoute exact path="/my-parcel" component={Cards}/>
+                        <PrivateRoute exact path="/updateProfile" component={Updateprofile}/>
+                        <PrivateRoute exact path="/branch-data" component={Alerts}/>
+                        <PrivateRoute exact path="/create-branch" component={Badges}/>
+                        <PrivateRoute exact path="/employees" component={Buttons}/>
+                        <PrivateRoute exact path="/branch" component={BranchList}/>
                         <PrivateRoute exact path="/create-employee" component={LayoutComponent}/>
-                        <PrivateRoute exact path="/pagination" component={PaginationComponent}/>
-                        <AdminPrivateRoute exact path="/popover" component={PopoverComponent}/>
-                        <SubAdminPrivateRoute exact path="/parcel-list" component={TooltipComponent}/>
-                        {/* {ThemeRoutes.map((prop, key) => {
-                            if (prop.redirect) {
-                                return <Redirect from={prop.path} to={prop.pathTo} key={key} />;
-                            }
-                            else {
-                                return (
-                                    <Route path={prop.path} component={prop.component} key={key} />
-                                );
-                            }
-                        })} */}
+                        <PrivateRoute exact path="/update-employee/:uid" component={UpdateUser}/>
+                        <PrivateRoute exact path="/create-percel" component={PaginationComponent}/>
+                        <PrivateRoute exact path="/product-details/:uid" component={PopoverComponent}/>
+                        <PrivateRoute exact path="/parcel-list" component={TooltipComponent}/>
+                        <Route exact path="/track-parcel/:pid" component={ParcelTrack}/>
+                       
                     </Switch>
                 </div>
                 <Footer />

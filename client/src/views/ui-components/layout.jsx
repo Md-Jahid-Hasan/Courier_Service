@@ -26,6 +26,7 @@ const LayoutComponent = () => {
             }) 
 
             const temp = await res.json()
+            console.log(temp)
             setBranch(temp)
         }
         getBranchName()
@@ -128,13 +129,14 @@ const LayoutComponent = () => {
                                         <div className="input-group-prepend">
                                         <span className="input-group-text" id="basic-addon1"><i className="fas fa-code-branch"></i></span>
                                         </div>
+
                                         <select className="form-control form-control-sm" id="sel1" defaultValue={'DEFAULT'}>
-                                        <option value="DEFAULT" disabled hidden>
-                                            Enter Your Branch
-                                        </option>
-                                        {branch.map((x, key) => 
-                                            <option key={key} value={x._id}>{x.branch}</option>
-                                        )}
+                                            <option value="DEFAULT" disabled hidden>
+                                                Enter Your Branch
+                                            </option>
+                                            {branch.map((x, key) => 
+                                                <option key={key} value={x._id}>{x.branch}</option>
+                                            )}
                                         
                                         </select>
                                     </div>

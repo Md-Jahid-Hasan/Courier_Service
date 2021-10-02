@@ -168,3 +168,55 @@ body{
   width: 100%;
   height: 100vh;
 }
+
+.notclick{
+  font-weight: bold;
+}
+
+.t-click:not(.notclick){
+  cursor:pointer;
+  }
+
+.form-between{
+  display: flex;
+  justify-content: space-between;
+}
+
+.dataDiv {
+  width: 90%;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  text-align: left;
+}
+
+.dataViewCard {
+  padding: 3%;
+  margin-top: 3%;
+  margin-bottom: 3%;
+  border-radius: 0.5rem;
+  background: #fff;
+  border: 1px solid #dedede;
+}
+.col label{
+text-align: center;
+}
+.profile-tab label{
+  font-weight: 200;
+  text-align: center;
+}
+.profile-tab p{
+  font-weight: 200;
+  color: #0062cc;
+}
+.resiverinfo{
+  width: 50%;
+  margin: auto;
+  text-align: left;
+}
+.senderinfo{
+  width: 50%;
+  text-align: left;
+  margin: auto;
+
+}

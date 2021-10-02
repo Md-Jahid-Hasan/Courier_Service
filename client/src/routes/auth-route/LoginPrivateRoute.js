@@ -1,12 +1,14 @@
 import React, {useContext, useEffect} from "react";
 import {Route, Redirect} from "react-router-dom";
 import {GlobalContext} from '../../context/ProjectContext';
+import Cookies from "js-cookie";
 
 const LoginPrivateRoute = ({component: Component, ...rest}) => {
-    const {auth} = useContext(GlobalContext)
+    const {auth, loginRedirect} = useContext(GlobalContext)
     
     console.log("login")
 
+    console.log(auth.isAuthenticated, "222222222222222")
 
     return (
     <div>

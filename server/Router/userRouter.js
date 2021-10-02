@@ -94,6 +94,7 @@ const deleteUser = async (req, res) => {
 
 
 const login = async (req, res) => {
+
     const { email, password } = req.body
     if (!email || !password) return res.status(400).json({ message: "fill the empty field" });
     const user = await User.findOne({ Email: req.body.email }).populate("branch", "branch contact")

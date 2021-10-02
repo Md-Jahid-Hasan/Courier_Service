@@ -6,8 +6,9 @@ import Buttons from '../views/ui-components/button.jsx';
 import Cards from '../views/ui-components/cards.jsx';
 import LayoutComponent from '../views/ui-components/layout.jsx';
 import PaginationComponent from '../views/ui-components/pagination.jsx';
-import PopoverComponent from '../views/ui-components/popover.jsx';
+import ProductDetails from '../views/ui-components/product_details.jsx';
 import TooltipComponent from '../views/ui-components/tooltip.jsx';
+import BranchList from '../views/ui-components/branch_list.jsx';
 
 
 var ThemeRoutes = [
@@ -15,6 +16,7 @@ var ThemeRoutes = [
         path: '/dashboard',
         name: 'Dashboard',
         icon: 'mdi mdi-view-dashboard',
+        permission: null,
         component: Starter
     },
 
@@ -22,51 +24,52 @@ var ThemeRoutes = [
         path: '/branch-data',
         name: 'Branch History',
         icon: 'mdi mdi-comment-processing-outline',
+        permission: '4',
         component: Alerts
     },
     {
-        path: '/all-branch',
-        name: 'All Branch History',
-        icon: 'mdi mdi-arrange-send-backward',
-        component: Badges
-    },
-    {
-        path: '/create-percel',
-        name: 'Book Parcel',
+        path: '/employees',
+        name: 'Branch Employee',
         icon: 'mdi mdi-toggle-switch',
+        permission: "2",
         component: Buttons
     },
     {
-        path: '/my-parcel',
-        name: 'My Parcels',
+        path: '/branch',
+        name: 'All Branch',
         icon: 'mdi mdi-credit-card-multiple',
-        component: Cards
+        permission: "1",
+        component: BranchList
     },
     {
         path: '/create-employee',
         name: 'Create',
         icon: 'mdi mdi-apps',
+        permission: "2",
         component: LayoutComponent
     },
     {
-        path: '/pagination',
-        name: 'Parcel Details',
+        path: '/create-percel',
+        name: 'Parcel Create',
         icon: 'mdi mdi-priority-high',
-        //permission: "employee",
+        permission: "5",
         component: PaginationComponent
     },
     {
-        path: '/popover',
-        name: 'Popover',
+        path: '/product-details/:uid',
+        name: 'Parcel Details',
         icon: 'mdi mdi-pencil-circle',
-        component: PopoverComponent
+        permission: "4",
+        component: ProductDetails
     },
-    {
-        path: '/parcel-list',
-        name: 'Parcel List',
-        icon: 'mdi mdi-image-filter-vintage',
-        component: TooltipComponent
-    },
+
     // { path: '/', pathTo: '/dashboard', name: 'Dashboard', redirect: true }
 ];
 export default ThemeRoutes;
+
+// permission level 1 = "only for Super Admin"
+// permission level 2 = "only for super admin and subadmin"
+// permission level 3 = "only for subadmin"
+// permission level 4 = "only for subadmin and empplye"
+// permission level 5 = "only for emplyee"
+// permission level null = "for all"

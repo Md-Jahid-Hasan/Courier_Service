@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { useHistory } from 'react-router-dom';
 import {
-    Card,
+    Card, Badge,
     CardBody,
     CardTitle,
     Button
@@ -11,8 +12,9 @@ import CircleLoader from "react-spinners/CircleLoader";
 
 const TooltipComponent = (props) => {
     const [parcels, setParcel] = useState([])
-    const [sortParam, setSortParam] = useState('createdAt')
+    const [searchResult, setSearchResult] = useState()
     const {authenticateUser, setAlertData, auth} = useContext(GlobalContext);
+    const history = useHistory()
 
    
     useEffect(() => {
@@ -43,12 +45,13 @@ const TooltipComponent = (props) => {
         })
         const temp = await res.json()
         if(res.status === 200){
-          setAlertData({message: "Parcel Create Successfully", code: "success"})
+            setAlertData({message: "Done", code: "success"})
+            let temp = parcels
+            temp = temp.filter(i => i._id !== id)
+            setParcel(temp)
         } else {
           setAlertData({message: temp.message, code: "danger"})
-        }
-       
-        
+        }   
     }
 
     const statusShow = (status) =>{
@@ -70,46 +73,95 @@ const TooltipComponent = (props) => {
         )
     }
 
+    useEffect(() => {
+        if(props.search){
+            let temp = parcels
+            temp = temp.filter(i => i.SearchId === props.search)
+            setSearchResult(temp)
+        }
+    }, [props.search])
+
+    const showProductDetails = (id, uid) => { 
+        history.push({
+            pathname: `/product-details/${uid}`,
+        })
+    }
+
+    const searchResultpage = () => {
+        return (
+            <>
+            {searchResult.map((res, key) => 
+            <tr key={key}>                            
+                <td className="t-click" onClick={(e) => {showProductDetails(res._id, res.SearchId)}}>
+                
+                    <Badge href="" color="primary">
+                        <h6 className="font-weight-medium mb-0 nowrap">{res.SearchId}</h6>
+                    </Badge>
+                    
+                </td>
+                <td>{res.SendTo.branch}</td>
+                <td><h6 className="font-weight-medium mb-0 nowrap">{res.ProductType}</h6></td>
+                <td>{moment(res.createdAt).format('DD MMM, YYYY')}</td>
+                <td><span 
+                className={`badge badge-light-${res.PayableAmount===0?"success":"danger"} text-${res.PayableAmount===0?"success":"danger"}`}>
+                    {res.PayableAmount}</span></td>
+                
+                <td className="badge badge-light-success text-success m-3">
+                {res.PaidAmount}</td>
+                {props.nav ? statusShow(res.status) :  props.dataStatus === "Sent" || props.dataStatus === "Delivered" ? null :<td>
+                    <Button className=" btn btn-sm" color="danger" onClick={() => chageParcelStatus(res.status, res._id)}>
+                        Change Status
+                    </Button>
+                </td> }
+                           
+            </tr>)}
+            </>
+        )
+    }
+    
     return (
         <div>
             <Card>
             <CardBody>
                 <div className="d-md-flex no-block">
                     <CardTitle>Projects of the Month</CardTitle>
-                    <div className="ml-auto">
-                        <form class="form-inline">
-                            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"/>
-                            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                        </form>
-                        
-                    </div>
                 </div>
+                { props.loading ? <tr colspan="6"><CircleLoader className="m-auto " loading={true} size={75} /></tr> :
                 <div className="table-responsive mt-2">
                     <table className="table stylish-table mb-0 mt-2 no-wrap v-middle">
                         <thead>
                             <tr>
-                                <th className="font-weight-normal text-muted border-0 border-bottom">Product type</th>
+                                <th className="font-weight-normal text-muted border-0 border-bottom">Product ID</th>
                                 <th className="font-weight-normal text-muted border-0 border-bottom">Send To</th>
-                                <th className="font-weight-normal text-muted border-0 border-bottom">Booked From</th>
+                                <th className="font-weight-normal text-muted border-0 border-bottom">Product Type</th>
                                 <th className="font-weight-normal text-muted border-0 border-bottom">Reservation Day</th>
                                 <th className="font-weight-normal text-muted border-0 border-bottom">Payable Amount</th>
+                                <th className="font-weight-normal text-muted border-0 border-bottom">Paid Amount</th>
                                 <th className="font-weight-normal text-muted border-0 border-bottom">{props.nav ? null : "Change"} Status</th>
                                 
                             </tr>
                         </thead>
                         <tbody>
-                            { props.loading ? <tr><CircleLoader loading={true} size={75} /></tr> :
+                            { searchResult ? searchResultpage() :
                             parcels.map((parcel, key) =>
                                 <tr key={key}>
                                     
-                                    <td><h6 className="font-weight-medium mb-0 nowrap">{parcel.ProductType}</h6></td>
+                                    <td className="t-click" onClick={(e) => {showProductDetails(parcel._id, parcel.SearchId)}}>
+                                     
+                                        <Badge href="" color="primary">
+                                            <h6 className="font-weight-medium mb-0 nowrap">{parcel.SearchId}</h6>
+                                        </Badge>
+                                        
+                                    </td>
                                     <td>{parcel.SendTo.branch}</td>
-                                    <td>{parcel.BookedFrom.branch}</td>
+                                    <td><h6 className="font-weight-medium mb-0 nowrap">{parcel.ProductType}</h6></td>
                                     <td>{moment(parcel.createdAt).format('DD MMM, YYYY')}</td>
                                     <td><span 
                                     className={`badge badge-light-${parcel.PayableAmount===0?"success":"danger"} text-${parcel.PayableAmount===0?"success":"danger"}`}>
                                         {parcel.PayableAmount}</span></td>
                                     
+                                    <td className="badge badge-light-success text-success m-3">
+                                    {parcel.PaidAmount}</td>
                                     {props.nav ? statusShow(parcel.status) :  props.dataStatus === "Sent" || props.dataStatus === "Delivered" ? null :<td>
                                         <Button className=" btn btn-sm" color="danger" onClick={() => chageParcelStatus(parcel.status, parcel._id)}>
                                             Change Status
@@ -122,7 +174,7 @@ const TooltipComponent = (props) => {
                             
                         </tbody>
                     </table>
-                </div>
+                </div>}
             </CardBody>
         </Card>
             {/* -------------------------------------------------------------------------------- */}

@@ -23,6 +23,8 @@ const newParcel = async (req, res) => {
         //     check:SenderName
         // })
         // .json({message:"All Field Must Be Filled Up"})
+        parcel = await Parcel.findOne({SearchId:req.body.SearchId})
+        if(parcel) return res.status(400).json({message:"This ID is already Exists"})
         parcel = new Parcel(req.body);
         parcel.BookedFrom = req.params.to
         parcel.SendTo = req.params.send
@@ -337,13 +339,19 @@ const BookedBranchData = async (req, res) => {
         )
 
         // const Booked  = result[0].Booked
-        const promises = await Promise.all(result[0].data.map(async (val, ind) => {
-            var parcel = await Parcel.findById({ _id: val._id }).populate("BookedFrom SendTo", "branch")
-            return parcel
-        }))
-
-
-        res.status(200).send(promises)
+        if(result.length < 1 || result === undefined){
+            return res.status(400).json({message:"There is no data to show"})
+        }
+        else{
+            const promises =await Promise.all(result[0].data.map(async (val, ind) => {
+                var parcel = await Parcel.findById({ _id: val._id }).populate("BookedFrom SendTo", "branch")
+                return parcel
+            })) 
+     
+            return res.status(200).send(promises)
+        
+        }
+    
     }
     else if (status === "Recieved") {
         result = await Parcel.aggregate([
@@ -376,22 +384,20 @@ const BookedBranchData = async (req, res) => {
 
         ]
         )
-        // var Recieved
-        // if(result!==[]){
-        //     Recieved  = result[0].Recieved
-        //     const promises =await Promise.all(result[0].data.map(async (val, ind) => {
-        //         var parcel = await Parcel.findById({ _id: val._id }).populate("BookedFrom SendTo", "branch")
-        //         return {Recieved:Recieved,
-        //                 information:parcel}
-        //     })) 
-        //     return res.status(200).send(promises)
-        // }
-        // else{
-        //     return res.status(400).json({message:"No recieved Today"})
-        // }
 
-
-        return res.status(200).send(result)
+        if(result.length < 1 || result === undefined){
+            return res.status(400).json({message:"There is no data to show"})
+        }
+        else{
+            const promises =await Promise.all(result[0].data.map(async (val, ind) => {
+                var parcel = await Parcel.findById({ _id: val._id }).populate("BookedFrom SendTo", "branch")
+                return parcel
+            })) 
+     
+            return res.status(200).send(promises)
+        
+        }
+    
 
 
     }
@@ -426,14 +432,19 @@ const BookedBranchData = async (req, res) => {
 
         ]
         )
-        // const Sent  = result[0].Sent
-        const promises = await Promise.all(result[0].data.map(async (val, ind) => {
-            var parcel = await Parcel.findById({ _id: val._id }).populate("BookedFrom SendTo", "branch")
-            return parcel
-        }))
-
-
-        res.status(200).send(promises)
+        if(result.length < 1 || result === undefined){
+            return res.status(400).json({message:"There is no data to show"})
+        }
+        else{
+            const promises =await Promise.all(result[0].data.map(async (val, ind) => {
+                var parcel = await Parcel.findById({ _id: val._id }).populate("BookedFrom SendTo", "branch")
+                return parcel
+            })) 
+     
+            return res.status(200).send(promises)
+        
+        }
+    
     }
     else if (status === 'Delivered') {
 
@@ -467,7 +478,19 @@ const BookedBranchData = async (req, res) => {
 
         ]
         )
-        res.status(200).send(result)
+        if(result.length < 1 || result === undefined){
+            return res.status(400).json({message:"There is no data to show"})
+        }
+        else{
+            const promises =await Promise.all(result[0].data.map(async (val, ind) => {
+                var parcel = await Parcel.findById({ _id: val._id }).populate("BookedFrom SendTo", "branch")
+                return parcel
+            })) 
+     
+            return res.status(200).send(promises)
+        
+        }
+    
     }
     else {
 
@@ -501,7 +524,19 @@ const BookedBranchData = async (req, res) => {
 
         ]
         )
-        res.status(200).send(result)
+        if(result.length < 1 || result === undefined){
+            return res.status(400).json({message:"There is no data to show"})
+        }
+        else{
+            const promises =await Promise.all(result[0].data.map(async (val, ind) => {
+                var parcel = await Parcel.findById({ _id: val._id }).populate("BookedFrom SendTo", "branch")
+                return parcel
+            })) 
+     
+            return res.status(200).send(promises)
+        
+        }
+    
     }
 }
 
@@ -551,7 +586,19 @@ const SentBranchData = async (req, res) => {
 
         ]
         )
-        res.status(200).send(result)
+        if(result.length < 1 || result === undefined){
+            return res.status(400).json({message:"There is no data to show"})
+        }
+        else{
+            const promises =await Promise.all(result[0].data.map(async (val, ind) => {
+                var parcel = await Parcel.findById({ _id: val._id }).populate("BookedFrom SendTo", "branch")
+                return parcel
+            })) 
+     
+            return res.status(200).send(promises)
+        
+        }
+    
     }
     else if (status === "Recieved") {
         result = await Parcel.aggregate([
@@ -584,7 +631,19 @@ const SentBranchData = async (req, res) => {
 
         ]
         )
-        res.status(200).send(result)
+        if(result.length < 1 || result === undefined){
+            return res.status(400).json({message:"There is no data to show"})
+        }
+        else{
+            const promises =await Promise.all(result[0].data.map(async (val, ind) => {
+                var parcel = await Parcel.findById({ _id: val._id }).populate("BookedFrom SendTo", "branch")
+                return parcel
+            })) 
+     
+            return res.status(200).send(promises)
+        
+        }
+    
     }
     else if (status === "Sent") {
         result = await Parcel.aggregate([
@@ -617,7 +676,19 @@ const SentBranchData = async (req, res) => {
 
         ]
         )
-        res.status(200).send(result)
+        if(result.length < 1 || result === undefined){
+            return res.status(400).json({message:"There is no data to show"})
+        }
+        else{
+            const promises =await Promise.all(result[0].data.map(async (val, ind) => {
+                var parcel = await Parcel.findById({ _id: val._id }).populate("BookedFrom SendTo", "branch")
+                return parcel
+            })) 
+     
+            return res.status(200).send(promises)
+        
+        }
+    
     }
     else if (status === "Delivered") {
 
@@ -651,7 +722,19 @@ const SentBranchData = async (req, res) => {
 
         ]
         )
-        res.status(200).send(result)
+        if(result.length < 1 || result === undefined){
+            return res.status(400).json({message:"There is no data to show"})
+        }
+        else{
+            const promises =await Promise.all(result[0].data.map(async (val, ind) => {
+                var parcel = await Parcel.findById({ _id: val._id }).populate("BookedFrom SendTo", "branch")
+                return parcel
+            })) 
+     
+            return res.status(200).send(promises)
+        
+        }
+    
     }
     else {
         result = await Parcel.aggregate([
@@ -684,7 +767,19 @@ const SentBranchData = async (req, res) => {
 
         ]
         )
-        res.status(200).send(result)
+        if(result.length < 1 || result === undefined){
+            return res.status(400).json({message:"There is no data to show"})
+        }
+        else{
+            const promises =await Promise.all(result[0].data.map(async (val, ind) => {
+                var parcel = await Parcel.findById({ _id: val._id }).populate("BookedFrom SendTo", "branch")
+                return parcel
+            })) 
+     
+            return res.status(200).send(promises)
+        
+        }
+    
 
     }
 
@@ -731,7 +826,18 @@ const SelfData = async (req, res) => {
 
     ]
     )
-    res.status(200).send(result)
+    if(result.length < 1 || result === undefined){
+        return res.status(400).json({message:"There is no data to show"})
+    }
+    else{
+        const promises =await Promise.all(result[0].data.map(async (val, ind) => {
+            var parcel = await Parcel.findById({ _id: val._id }).populate("BookedFrom SendTo", "branch")
+            return parcel
+        })) 
+ 
+        return res.status(200).send(promises)
+    
+    }
 
 }
 
@@ -897,13 +1003,13 @@ const subAdminHistory = async (req, res) => {
     const calender = req.params.calender
     const presentTime = new Date(calender)
     const branch = toId(req.params.branch)
-    console.log(branch)
+    
     const presentMonth = presentTime.getMonth()
-    console.log(presentMonth)
+    
     const presentYear = presentTime.getFullYear()
-    console.log(presentYear)
+   
     const presentDate = presentTime.getDate()
-    console.log(presentDate)
+   
     const LatestDayMonth = `${presentYear}-0${presentMonth + 1}-${presentDate}`
     console.log(LatestDayMonth)
 
@@ -942,15 +1048,23 @@ const subAdminHistory = async (req, res) => {
             }
         },
 
-    ]
-    )
-
-    // const Product  = result[0].Product
-    const promises = await Promise.all(result[0].data.map(async (val, ind) => {
-        var parcel = await Parcel.findById({ _id: val._id }).populate("BookedFrom SendTo", "branch")
-        return parcel
-    }))
-
+        ]
+        )
+        console.log(result)
+        // const Product  = result[0].Product
+        if(result.length < 1 || result === undefined){
+            return res.status(400).json({message:"There is no data to show"})
+        }
+        else{
+            const promises =await Promise.all(result[0].data.map(async (val, ind) => {
+                var parcel = await Parcel.findById({ _id: val._id }).populate("BookedFrom SendTo", "branch")
+                return parcel
+            })) 
+     
+            return res.status(200).send(promises)
+        
+        }
+            
 
     return res.status(200).send(promises)
 
@@ -975,19 +1089,24 @@ const subAdminHistorySend = async (req, res) => {
 
 
 
-    const result = await Parcel.aggregate([
-        {
-            $addFields: { creationDate: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } } }
-        },
-        {
-            $match: {
-                creationDate: {
-                    $eq: LatestDayMonth
-                },
-                SendTo: branch
+        const result = await Parcel.aggregate([
+            {
+                $addFields: { updatedDate: { $dateToString: { format: "%Y-%m-%d", date: "$updatedAt" } } }
+            },
+            {
+                $match: {
+                    updatedDate: {
+                        $eq: LatestDayMonth
+                    },
+                    SendTo:branch ,
+                    $or:[
+                        {status:"Delivered"},
+                        {status:"Recieved"}
+                    ]
+                }
+            },
 
-            }
-        },
+ 
 
         {
             $group: {
@@ -1013,15 +1132,21 @@ const subAdminHistorySend = async (req, res) => {
     )
 
 
-    // const Product  = result[0].Product
-    const promises = await Promise.all(result[0].data.map(async (val, ind) => {
-        var parcel = await Parcel.findById({ _id: val._id }).populate("BookedFrom SendTo", "branch")
-        return parcel
-    }))
-
-
-    return res.status(200).send(promises)
-
+        console.log(result)
+        // const Product  = result[0].Product
+        if(result.length < 1 || result === undefined){
+            return res.status(400).json({message:"There is no data to show"})
+        }
+        else{
+            const promises =await Promise.all(result[0].data.map(async (val, ind) => {
+                var parcel = await Parcel.findById({ _id: val._id }).populate("BookedFrom SendTo", "branch")
+                return parcel
+            })) 
+     
+            return res.status(200).send(promises)
+        
+        }
+    
 }
 
 const AdminDash = async (req, res) => {
@@ -1451,6 +1576,23 @@ const AdminDashSend = async (req, res) => {
 
 }
 
+const getUniqueParcel = async(req,res)=>{
+    try {
+        
+        const parcels = await Parcel.findOne({SearchId:req.params.parcelid})
+        console.log(parcels)
+        if (!parcels) return res.status(400).json({ message: "Parcel Not Found" })
+        const result = await Parcel.findById({_id:parcels._id}).populate("BookedFrom SendTo","branch")
+
+
+        return res.status(200).send({
+            parcel: result
+        })
+
+    } catch (err) {
+        return res.status(400).json({ messag: "The Parcel Does not Exist " })
+    }
+}
 
 
 
@@ -1698,8 +1840,12 @@ const sendText = async(req,res)=>{
 
 router.route('/parcelApi/parcel/:send/:to/:employee')
     .post(newParcel)
+    // optional Route
 router.route('/parcelApi/see/:parcelid')
     .get(getParcel)
+    // 
+router.route('/parcelApi/see/oneProduct/:parcelUniqueid')
+    .get(getUniqueParcel)
 router.route('/parcelApi/seeComingProduct/:id')
     .get(comingProduct)
 router.route('/parcelApi/see/getAll/allParcel')
@@ -1747,4 +1893,3 @@ router.route("/textApi/userMessage")
 
 
 module.exports = router;
-
