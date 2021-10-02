@@ -7,6 +7,7 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const { Branch } = require('../models/branchModel');
 const { result } = require('lodash');
+const { User } = require('../models/userModel');
 const toId = mongoose.Types.ObjectId
 
 const newParcel = async (req, res) => {
@@ -41,11 +42,11 @@ const newParcel = async (req, res) => {
 
 const getParcel = async (req, res) => {
     try {
-        
-        const parcels = await Parcel.findOne({SearchId:req.params.parcelid})
+
+        const parcels = await Parcel.findOne({ SearchId: req.params.parcelid })
         console.log(parcels)
         if (!parcels) return res.status(400).json({ message: "Parcel Not Found" })
-        const result = await Parcel.findById({_id:parcels._id}).populate("BookedFrom SendTo","branch")
+        const result = await Parcel.findById({ _id: parcels._id }).populate("BookedFrom SendTo", "branch")
 
 
         return res.status(200).send({
@@ -398,7 +399,7 @@ const BookedBranchData = async (req, res) => {
         }
     
 
-        
+
     }
     else if (status === "Sent") {
         result = await Parcel.aggregate([
@@ -976,8 +977,6 @@ const subAdminDash = async (req, res) => {
 
         ]
         )
-
-
         res.status(200).send(result)
     }
 
@@ -1000,7 +999,7 @@ const subAdminDashCard = async (req, res) => {
     ])
     return res.status(200).send(result)
 }
-const subAdminHistory = async(req,res)=>{
+const subAdminHistory = async (req, res) => {
     const calender = req.params.calender
     const presentTime = new Date(calender)
     const branch = toId(req.params.branch)
@@ -1012,39 +1011,42 @@ const subAdminHistory = async(req,res)=>{
     const presentDate = presentTime.getDate()
    
     const LatestDayMonth = `${presentYear}-0${presentMonth + 1}-${presentDate}`
-   
+    console.log(LatestDayMonth)
+
+
+
     const result = await Parcel.aggregate([
-            {
-                $addFields: { creationDate: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } } }
-            },
-            {
-                $match: {
-                    creationDate: {
-                        $eq: LatestDayMonth
-                    },
-                    BookedFrom:branch    
-                }
-            },
+        {
+            $addFields: { creationDate: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } } }
+        },
+        {
+            $match: {
+                creationDate: {
+                    $eq: LatestDayMonth
+                },
+                BookedFrom: branch
+            }
+        },
 
-            {
-                $group: {
-                    _id: 'null',
-                    // Total:{$add:['$TotalCost','$PaidAmount']},
-                    // Booked: { $sum: "$TotalCost" },
-                    // PaidAmount: { $sum: "$PaidAmount" },
-                    // PayableAmount: { $sum: '$PayableAmount' }
-                    Product:{ $sum: 1 },
-                    data: { $push: '$$ROOT' }
-                }
+        {
+            $group: {
+                _id: 'null',
+                // Total:{$add:['$TotalCost','$PaidAmount']},
+                // Booked: { $sum: "$TotalCost" },
+                // PaidAmount: { $sum: "$PaidAmount" },
+                // PayableAmount: { $sum: '$PayableAmount' }
+                Product: { $sum: 1 },
+                data: { $push: '$$ROOT' }
+            }
 
-            },
-            {
-                $project: {
-                    _id: 0,
-                    data:1,
-                    Product:1
-                }
-            },
+        },
+        {
+            $project: {
+                _id: 0,
+                data: 1,
+                Product: 1
+            }
+        },
 
         ]
         )
@@ -1064,12 +1066,14 @@ const subAdminHistory = async(req,res)=>{
         }
             
 
-        // res.status(200).send(result)
-    
+    return res.status(200).send(promises)
+
+    // res.status(200).send(result)
+
 }
 
 
-const subAdminHistorySend = async(req,res)=>{
+const subAdminHistorySend = async (req, res) => {
     const calender = req.params.calender
     const presentTime = new Date(calender)
     const branch = toId(req.params.branch)
@@ -1102,28 +1106,30 @@ const subAdminHistorySend = async(req,res)=>{
                 }
             },
 
-            {
-                $group: {
-                    _id: 'null',
-                    // Total:{$add:['$TotalCost','$PaidAmount']},
-                    // Booked: { $sum: "$TotalCost" },
-                    // PaidAmount: { $sum: "$PaidAmount" },
-                    // PayableAmount: { $sum: '$PayableAmount' }
-                    Product:{ $sum: 1 },
-                    data: { $push: '$$ROOT' }
-                }
+ 
 
-            },
-            {
-                $project: {
-                    _id: 0,
-                    data:1,
-                    Product:1
-                }
-            },
+        {
+            $group: {
+                _id: 'null',
+                // Total:{$add:['$TotalCost','$PaidAmount']},
+                // Booked: { $sum: "$TotalCost" },
+                // PaidAmount: { $sum: "$PaidAmount" },
+                // PayableAmount: { $sum: '$PayableAmount' }
+                Product: { $sum: 1 },
+                data: { $push: '$$ROOT' }
+            }
 
-        ]
-        )
+        },
+        {
+            $project: {
+                _id: 0,
+                data: 1,
+                Product: 1
+            }
+        },
+
+    ]
+    )
 
 
         console.log(result)
@@ -1588,6 +1594,250 @@ const getUniqueParcel = async(req,res)=>{
     }
 }
 
+
+
+// ----------------
+const Test = async (req, res) => {
+    const calender = req.params.calender
+    const date = req.params.date
+    const branch = req.params.branch
+    if (date === "Monthly") {
+        const presentTime = new Date(calender)
+
+        const presentMonth = presentTime.getMonth()
+        console.log(presentMonth)
+        const presentYear = presentTime.getFullYear()
+        console.log(presentYear)
+        const FirstDayMonth = `${presentYear}-0${presentMonth + 1}-01`
+        console.log(FirstDayMonth)
+        const LastDayMonth = `${presentYear}-0${presentMonth + 1}-30`
+        console.log(LastDayMonth)
+
+
+        const result = await Parcel.aggregate([
+            {
+                $facet: {
+                    "showData": [
+                        {
+                            $addFields: { creationDate: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } } }
+                        },
+                        {
+                            $match: {
+                                creationDate: {
+                                    $lte: LastDayMonth,
+                                    $gte: FirstDayMonth
+                                },
+                                BookedFrom: toId(branch)
+
+                            }
+                        },
+
+                        {
+                            $group: {
+                                _id: '$creationDate',
+
+                                PaidAmount: { $sum: "$PaidAmount" },
+                                PayableAmount: { $sum: '$PayableAmount' }
+                            }
+
+                        },
+
+
+                        {
+                            $addFields: { week_day: '$_id' }
+                        },
+                        {
+                            $sort: { week_day: 1 }
+                        },
+
+                        {
+                            $project: {
+                                _id: 0,
+
+                            }
+                        },
+                    ],
+
+                    "showPayable": [
+                        {
+                            $addFields: { creationDate: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } } }
+                        },
+                        {
+                            $match: {
+                                creationDate: {
+                                    $lte: LastDayMonth,
+                                    $gte: FirstDayMonth
+                                },
+                                status: "Delivered",
+                                SendTo: toId(branch)
+
+                            }
+                        },
+
+                        {
+                            $group: {
+                                _id: '$creationDate',
+                                PayableAmount: { $sum: '$PayableAmount' }
+                            }
+
+                        },
+
+
+                        {
+                            $addFields: { week_day: '$_id' }
+                        },
+                        {
+                            $sort: { week_day: 1 }
+                        },
+
+                        {
+                            $project: {
+                                _id: 0,
+
+                            }
+                        },
+                    ]
+                }
+            },
+
+
+        ]
+        )
+
+
+        res.status(200).send(result)
+    }
+    else {
+
+        const presentTime = new Date(calender)
+
+
+        const presentYear = presentTime.getFullYear()
+        console.log(presentYear)
+        const FirstDayMonth = `${presentYear}-01`
+        console.log(FirstDayMonth)
+        const LastDayMonth = `${presentYear}-12`
+        console.log(LastDayMonth)
+
+
+        const result = await Parcel.aggregate([
+
+
+            {
+                $facet: {
+                    "showData": [
+                        {
+
+                            $addFields: { creationDate: { $dateToString: { format: "%Y-%m", date: "$createdAt" } } }
+                        },
+
+                        {
+                            $match: {
+                                creationDate: {
+                                    $lte: LastDayMonth,
+                                    $gte: FirstDayMonth
+                                },
+                                BookedFrom: toId(branch)
+
+                            }
+                        },
+
+                        {
+                            $group: {
+                                _id: '$creationDate',
+
+                                PaidAmount: { $sum: "$PaidAmount" },
+                                PayableAmount: { $sum: '$PayableAmount' }
+                            }
+
+                        },
+
+
+                        {
+                            $addFields: { week_day: '$_id' }
+                        },
+                        {
+                            $sort: { week_day: 1 }
+                        },
+
+                        {
+                            $project: {
+                                _id: 0,
+
+                            }
+                        },
+                    ],
+
+                    "showPayable": [
+                        {
+
+                            $addFields: { creationDate: { $dateToString: { format: "%Y-%m", date: "$createdAt" } } }
+                        },
+                        {
+                            $match: {
+                                creationDate: {
+                                    $lte: LastDayMonth,
+                                    $gte: FirstDayMonth
+                                },
+                                status: "Delivered",
+                                SendTo: toId(branch)
+
+                            }
+                        },
+
+                        {
+                            $group: {
+                                _id: '$creationDate',
+                                PayableAmount: { $sum: '$PayableAmount' }
+                            }
+
+                        },
+
+                        {
+                            $addFields: { week_day: '$_id' }
+                        },
+                        {
+                            $sort: { week_day: 1 }
+                        },
+
+                        {
+                            $project: {
+                                _id: 0,
+
+                            }
+                        },
+                    ]
+                }
+            },
+
+
+        ]
+        )
+
+
+        res.status(200).send(result)
+    }
+
+}
+
+// ----------------
+const sendText = async(req,res)=>{
+    const branch = await Branch.findOne({_id:toId(req.body.branchId)})
+    const parcel = await Parcel.findOne({SendTo:toId(req.body.sendToBranch)}).populate("SendTo BookedBy","branch contact Username Email")
+    const user = await User.findOne({_id:toId(req.body.bookedbyId)})
+
+    if(req.body.status === "Booked"){
+        
+        console.log(`Dear ${req.body.SenderName}, Your Product is Booked at ${branch.branch} Branch. The Proqduct Will Be Sent To ${parcel.SendTo.branch} Branch. Your Product is Booked By ${user.Username} ` )
+    }
+    else if(req.body.status === "Recieved"){
+        console.log(`Dear ${req.body.RecieverName}, Your Product is Booked at ${branch.branch} Branch. The Proqduct is  now rtecieved At ${parcel.SendTo.branch} Branch. Your Product is Booked By ${user.Username} `)
+    }
+    else{
+        console.log(`Dear ${req.body.SenderName}, Your Product is delivered to ${req.body.RecieverName}`)
+    }
+}
+
 router.route('/parcelApi/parcel/:send/:to/:employee')
     .post(newParcel)
     // optional Route
@@ -1598,7 +1848,7 @@ router.route('/parcelApi/see/oneProduct/:parcelUniqueid')
     .get(getUniqueParcel)
 router.route('/parcelApi/seeComingProduct/:id')
     .get(comingProduct)
-router.route('/parcelApi/see/allParcel')
+router.route('/parcelApi/see/getAll/allParcel')
     .get(allParcel)
 router.route('/parcelApi/updateParcel/:id')
     .put(updateParcel)
@@ -1636,7 +1886,10 @@ router.route('/parcelApi/admin/dashboard/cardBranch/:branch')
     .get(AdminDashCardBranch)
 router.route('/parcelApi/admin/dashboard/sendTo/totalShowbranch/cardBranch/:branch')
     .get(AdminDashCardBranchSend)
+router.route('/testApi/testData/:calender/:date/:branch')
+    .get(Test)
+router.route("/textApi/userMessage")
+    .post(sendText)
 
 
 module.exports = router;
-

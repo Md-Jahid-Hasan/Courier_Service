@@ -10,7 +10,7 @@ const PaginationComponent = () => {
     const [parcelData, setParcelData] = useState({
         SenderName:"", SenderNumber:"", BookedFrom:authenticateUser.branch.id, RecieverName:"", RecieverNumber:"",
         SendTo:"", ProductType:"", TotalCost:0, PaidAmount:0, PayableAmount: 0, expectedDate: new Date(),
-        status: "Booked", SearchId: ""
+        status: "Booked", SearchId: "", contact: "12345"
     })
     const [branch, setBranch] = useState([])
    

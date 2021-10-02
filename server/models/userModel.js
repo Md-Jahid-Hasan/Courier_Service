@@ -27,6 +27,10 @@ const userSchema = new Schema({
         default:false
     },
     branch:{type:Schema.Types.ObjectId,ref:'branch'},
+    contact: {
+        type: Number,
+        minlength: 11 
+    },
     tokens: [{
         token: {
             type: String,
@@ -69,7 +73,8 @@ const validateUser = (user) => {
         Password: passwordComplexity(complexityOptions),
         Cpassword:passwordComplexity(complexityOptions),
         IsAdmin:joi.boolean(),
-        IsSuperAdmin:joi.boolean()
+        IsSuperAdmin:joi.boolean(),
+        contact:joi.number()
 
     })
     return schema.validate(user);
